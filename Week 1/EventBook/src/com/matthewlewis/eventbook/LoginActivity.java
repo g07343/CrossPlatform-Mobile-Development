@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -24,6 +27,8 @@ import com.parse.SignUpCallback;
 
 public class LoginActivity extends Activity {
 
+TextView errorText;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +44,10 @@ public class LoginActivity extends Activity {
         Button loginBtn = (Button) findViewById(R.id.loginButton);
         Button newUserBtn = (Button) findViewById(R.id.newUserButton);
         Checkable saveCredentials = (Checkable) findViewById(R.id.loginCheckbox);
+        errorText = (TextView) findViewById(R.id.errorText);
+        
+        //set the errorText to not be visible by default
+        errorText.setVisibility(View.GONE);
         
         //set up onClick methods for our buttons
         loginBtn.setOnClickListener(new OnClickListener() {
@@ -46,10 +55,33 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// grab our data from our fields and attempt to log in
+				final String userEmail = nameField.getText().toString();
+				final String password = passwordField.getText().toString();
 				
-				
-			}
-        	
+				//check to ensure there is at least something in the above fields
+				if (userEmail != null && userEmail.length() > 0) {
+					if (password != null && password.length() > 0) {
+						ParseUser.logInInBackground(userEmail, password, new LogInCallback() {
+
+							@Override
+							public void done(ParseUser user, ParseException e) {
+								// check to see if the user was successfully logged in or not
+								if (user != null) {
+									System.out.println("Login Successful!");
+								} else {
+									showError("loginFailed");
+								}								
+							}							
+						});
+					} else {
+						//user did not enter a password
+						showError("password");
+					}				
+				} else {
+					//user forgot to input an email address
+					showError("username");
+				}				
+			}        	
         });
         
         //set up onClick method for our new user button
@@ -58,30 +90,39 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// grab the entered credentials and attempt to create a new user via Parse
-				String userEmail = nameField.getText().toString();
+				final String userEmail = nameField.getText().toString();
 				String password = passwordField.getText().toString();
 				
-				//create a ParseUser object and set to what the user input
-				ParseUser newUser = new ParseUser();
-				newUser.setUsername(userEmail);
-				newUser.setPassword(password);
-				
-				//attempt to sign up the user now
-				newUser.signUpInBackground(new SignUpCallback() {
-
-					@Override
-					public void done(ParseException e) {
-						// check to see if we were successful
-						if (e == null) {
-							
-						} else {
-							
-						} 
+				if (userEmail != null && userEmail.length() > 0) {
+					if (password != null && password.length() > 0) {
+						//create a ParseUser object and set to what the user input
+						ParseUser newUser = new ParseUser();
+						newUser.setUsername(userEmail);
+						newUser.setPassword(password);
 						
-					}					
-				});
-			}
-        	
+						//attempt to sign up the user now
+						newUser.signUpInBackground(new SignUpCallback() {
+
+							@Override
+							public void done(ParseException e) {
+								// check to see if we were successful
+								if (e == null) {
+									//now that we have created the new user, send them to the "viewer" activity
+									System.out.println("User:  " + userEmail + "  was created successfully!!!");
+								} else {
+									//there was an error trying to create a new user, so figure out what it is and alert user
+									showError("signUp");
+								} 								
+							}					
+						});
+					} else {
+						//no password
+						showError("password");
+					}	
+				} else {
+					showError("username");
+				}				
+			}      	
         });
         
         
@@ -132,6 +173,19 @@ public class LoginActivity extends Activity {
         });
     }
 
+    public void showError(String error) {
+    	//check which type of error needs to be displayed to the user
+    	if (error.equals("password")) {
+    		errorText.setText("Please choose a valid password");
+    	} else if (error.equals("username")) {
+    		errorText.setText("Please input a valid email address");
+    	} else if (error.equals("signUp")) {
+    		errorText.setText("Account already exists!  Please try logging in.");
+    	} else if (error.equals("loginFailed")) {
+    		errorText.setText("Error logging in.  Please check your login credentials.");
+    	}
+    	errorText.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

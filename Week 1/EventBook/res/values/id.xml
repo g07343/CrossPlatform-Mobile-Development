@@ -5,4 +5,5 @@
     <item type="id" name="loginCheckbox" />
     <item type="id" name="loginButton" />
     <item type="id" name="newUserButton" />
+    <item type="id" name="errorText" />
 </resources>

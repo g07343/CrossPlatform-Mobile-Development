@@ -4,5 +4,11 @@
     <string name="app_name">EventBook</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="email_helperText">Email Address</string>
+    <string name="password_helperText">Password</string>
+    <string name="login_buttonText">Login</string>
+    <string name="login_checkHelper">Keep me logged in?</string>
+    <string name="login_newUserText">Create New</string>
+    <string name="login_altText">No account?</string>
 
 </resources>

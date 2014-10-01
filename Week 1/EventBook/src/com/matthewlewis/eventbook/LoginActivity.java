@@ -1,12 +1,11 @@
 package com.matthewlewis.eventbook;
 
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,6 +57,10 @@ Checkable saveCredentials;
         //check to see if the user is logged in from the app cache still
         ParseUser currentUser = ParseUser.getCurrentUser();
         if (currentUser != null) {
+        	//since we were able to find the previously logged in user, we can go ahead and send them to the 'viewer' activity
+        	Intent viewIntent = new Intent(_context, ViewActivity.class);
+			System.out.println("Login Successful!");
+			startActivity(viewIntent);
         	System.out.println("User data found!" + "  Current username is:  " + currentUser.getUsername());
         	
         } else {
@@ -96,7 +99,10 @@ Checkable saveCredentials;
 							public void done(ParseUser user, ParseException e) {
 								// check to see if the user was successfully logged in or not
 								if (user != null) {
+									//we logged in, so send user to the 'view' activity
+									Intent viewIntent = new Intent(_context, ViewActivity.class);
 									System.out.println("Login Successful!");
+									startActivity(viewIntent);
 								} else {
 									showError("loginFailed");
 								}								
@@ -144,6 +150,10 @@ Checkable saveCredentials;
 									if (saveCredentials.isChecked()) {
 										
 									}
+									//send user to 'viewer' activity
+									Intent viewIntent = new Intent(_context, ViewActivity.class);
+									System.out.println("Login Successful!");
+									startActivity(viewIntent);
 								} else {
 									//there was an error trying to create a new user, so figure out what it is and alert user
 									showError("signUp");

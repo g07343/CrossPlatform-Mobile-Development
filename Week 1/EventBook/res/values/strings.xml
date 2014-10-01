@@ -11,5 +11,7 @@
     <string name="login_newUserText">Create New</string>
     <string name="login_altText">No account?</string>
     <string name="login_errorText">Account already exists!  Please try logging in.</string>
+    <string name="menu_new">New Event</string>
+    <string name="menu_logout">Logout</string>
 
 </resources>

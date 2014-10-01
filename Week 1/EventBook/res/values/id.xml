@@ -6,4 +6,6 @@
     <item type="id" name="loginButton" />
     <item type="id" name="newUserButton" />
     <item type="id" name="errorText" />
+    <item type="id" name="menu_add" />
+    <item type="id" name="menu_logout" />
 </resources>

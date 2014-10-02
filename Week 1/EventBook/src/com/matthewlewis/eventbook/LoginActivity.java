@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,16 +13,11 @@ import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.parse.FindCallback;
+import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class LoginActivity extends Activity {
@@ -105,6 +98,9 @@ Checkable saveCredentials;
 										passwordField.setText("");
 									}
 									
+									//since we have successfully logged into an account, hide the error text in case it's showing
+									errorText.setVisibility(View.GONE);
+									
 									//we logged in, so send user to the 'view' activity
 									Intent viewIntent = new Intent(_context, ViewActivity.class);
 									System.out.println("Login Successful!");
@@ -159,6 +155,14 @@ Checkable saveCredentials;
 										nameField.setText("");
 										passwordField.setText("");
 									}
+									
+									//since we have successfully created an account, hide the error text in case it's showing
+									errorText.setVisibility(View.GONE);
+									
+									//show toast to user to let them know their account was created
+									Toast.makeText(getApplicationContext(), "Account created",
+											   Toast.LENGTH_SHORT).show();
+									
 									//send user to 'viewer' activity
 									Intent viewIntent = new Intent(_context, ViewActivity.class);
 									System.out.println("Login Successful!");

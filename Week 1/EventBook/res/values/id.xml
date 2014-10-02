@@ -8,4 +8,8 @@
     <item type="id" name="errorText" />
     <item type="id" name="menu_add" />
     <item type="id" name="menu_logout" />
+    <item type="id" name="add_title" />
+    <item type="id" name="add_date" />
+    <item type="id" name="add_time" />
+    <item type="id" name="add_saveBtn" />
 </resources>

@@ -2,9 +2,9 @@ package com.matthewlewis.eventbook;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,6 +24,8 @@ public class ViewActivity extends Activity{
 		
 		//set our activity's view to the correct layout file
 		setContentView(R.layout.activity_view);
+		
+		//grab all events that the current user has previously created (if any)
 	}
 	
 	@Override
@@ -41,6 +43,8 @@ public class ViewActivity extends Activity{
         int id = item.getItemId();
         if (id == R.id.menu_add) {
         	System.out.println("Add tapped!");
+        	Intent addIntent = new Intent(_context, AddActivity.class);
+        	startActivity(addIntent);
             return true;
         } else if (id == R.id.menu_logout) {
         	System.out.println("Logout tapped!");

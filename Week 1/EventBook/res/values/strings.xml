@@ -13,5 +13,10 @@
     <string name="login_errorText">Account already exists!  Please try logging in.</string>
     <string name="menu_new">New Event</string>
     <string name="menu_logout">Logout</string>
+    <string name="add_titleHelper">Event Name</string>
+    <string name="add_saveButton">Add</string>
+    <string name="add_eventText">Name your event</string>
+    <string name="add_eventDate">What day?</string>
+    <string name="add_eventTime">What time?</string>
 
 </resources>

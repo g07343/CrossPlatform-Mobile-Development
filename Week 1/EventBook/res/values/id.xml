@@ -12,4 +12,6 @@
     <item type="id" name="add_date" />
     <item type="id" name="add_time" />
     <item type="id" name="add_saveBtn" />
+    <item type="id" name="view_tableView" />
+    <item type="id" name="view_helperText" />
 </resources>

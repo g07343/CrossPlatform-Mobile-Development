@@ -18,5 +18,6 @@
     <string name="add_eventText">Name your event</string>
     <string name="add_eventDate">What day?</string>
     <string name="add_eventTime">What time?</string>
+    <string name="view_helperText">Looks like you don\'t have any events saved.  Tap the \'+\' icon above</string>
 
 </resources>

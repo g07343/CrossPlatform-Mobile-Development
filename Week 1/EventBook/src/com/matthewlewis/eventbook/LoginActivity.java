@@ -99,6 +99,12 @@ Checkable saveCredentials;
 							public void done(ParseUser user, ParseException e) {
 								// check to see if the user was successfully logged in or not
 								if (user != null) {
+									//make sure to clear out the fields if the checkbox is left unchecked
+									if (!(saveCredentials.isChecked())) {
+										nameField.setText("");
+										passwordField.setText("");
+									}
+									
 									//we logged in, so send user to the 'view' activity
 									Intent viewIntent = new Intent(_context, ViewActivity.class);
 									System.out.println("Login Successful!");
@@ -147,8 +153,11 @@ Checkable saveCredentials;
 								if (e == null) {
 									//now that we have created the new user, send them to the "viewer" activity
 									System.out.println("User:  " + userEmail + "  was created successfully!!!");
-									if (saveCredentials.isChecked()) {
-										
+									
+									//make sure to clear out the fields if the checkbox is left unchecked
+									if (!(saveCredentials.isChecked())) {
+										nameField.setText("");
+										passwordField.setText("");
 									}
 									//send user to 'viewer' activity
 									Intent viewIntent = new Intent(_context, ViewActivity.class);

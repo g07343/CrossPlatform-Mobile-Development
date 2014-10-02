@@ -79,4 +79,10 @@ public class AddActivity extends Activity{
 		});
 	}
 	
+	@Override
+	public void onBackPressed() {
+		//user tapped the back button, so inform them they will return to the login screen and log them out
+		finish();
+		super.finish();
+	}
 }

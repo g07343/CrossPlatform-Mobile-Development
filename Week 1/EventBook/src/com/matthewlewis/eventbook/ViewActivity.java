@@ -9,6 +9,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,11 +21,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -130,7 +129,7 @@ public class ViewActivity extends Activity{
 	}
 	
 	//this method updates our event listview
-	public void updateList(List<ParseObject> objects) {
+	@SuppressLint("DefaultLocale") public void updateList(List<ParseObject> objects) {
 		//create string array to hold formatted events
 		
 		//events = new String[objects.size()];
@@ -144,8 +143,17 @@ public class ViewActivity extends Activity{
 			int eventDay = currentEvent.getInt("day");
 			int eventHour = currentEvent.getInt("hour");
 			int eventMinute = currentEvent.getInt("minute");
-			String fullEvent = eventName + ":" + "  " + eventMonth + "/" + eventDay + "  at  " + eventHour + ":" +  eventMinute;
-			//events[i] = fullEvent;
+			
+			//convert our minutes to a string so we can check the length
+			//this is so we can add a '0' in front if its less than 10 so it looks okay
+			String convertedMinutes = String.valueOf(eventMinute);
+			String fullEvent;
+			if (convertedMinutes.length() == 1) {
+				String paddedInt = String.format("%02d", eventMinute);
+				fullEvent = eventName + ":" + "  " + eventMonth + "/" + eventDay + "  at  " + eventHour + ":" +  paddedInt;
+			} else {
+				fullEvent = eventName + ":" + "  " + eventMonth + "/" + eventDay + "  at  " + eventHour + ":" +  eventMinute;
+			}
 			events.add(i, fullEvent);
 			
 			//make sure to add the ids to our array so we can delete items if necessary
@@ -153,7 +161,7 @@ public class ViewActivity extends Activity{
 		}
 		
 		//now that we have the formatted events, add to an adapter and update our listview
-		final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, events);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, events);
 		listView.setAdapter(adapter);
 		
 		//add longPressListener for listview items so we can allow them to be deleted

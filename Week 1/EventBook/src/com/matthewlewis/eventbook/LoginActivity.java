@@ -193,53 +193,6 @@ Checkable saveCredentials;
 				}
 			}
 		}) ;
-        
-        
-        
-        
-//        //test parse to make sure it is functioning correctly and is communicating with the remote server
-//        final ParseObject testObject = new ParseObject("TestObject");
-//        testObject.put("isWorking", true);
-//        testObject.saveInBackground(new SaveCallback() {
-//
-//			@Override
-//			public void done(ParseException e) {
-//				// TODO Auto-generated method stub
-//				System.out.println("OBJECT SAVED DONE METHOD RUNS!!!");
-//				String id = testObject.getObjectId();
-//		        Log.d("SavedKey: ", id);
-//			}
-//        	
-//        });
-//        
-//        ParseObject newObject = new ParseObject("NewObject");
-//        newObject.put("location", "Orlando, FL");
-//        newObject.put("age", 19);
-//        newObject.put("name", "Test Name");
-//        newObject.saveInBackground();
-        
-        
-        
-//        ParseQuery<ParseObject> query = ParseQuery.getQuery("NewObject");
-//        query.findInBackground(new FindCallback<ParseObject>() {
-//
-//			@Override
-//			public void done(List<ParseObject> objects, ParseException e) {
-//				// TODO Auto-generated method stub
-//				if (e == null) {
-//					//loop through saved accounts
-//					for (int i = 0; i < objects.size(); i ++) {
-//						ParseObject currentItem = objects.get(i);
-//						String name = currentItem.getString("name");
-//						System.out.println("Name found was:  " + name);
-//					}
-//					
-//				} else {
-//					System.out.println("Object not found!");
-//				}
-//			}
-//        	
-//        });
     }
 
     public void setLoginPrefs() {
@@ -263,24 +216,5 @@ Checkable saveCredentials;
     		errorText.setText("Error logging in.  Please check your login credentials.");
     	}
     	errorText.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,10 +1,15 @@
 package com.matthewlewis.eventbook;
 
 import com.parse.ParseACL;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +24,7 @@ public class AddActivity extends Activity{
 	TimePicker timePicker;
 	EditText eventName;
 	Button saveButton;
+	Context _context;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,9 @@ public class AddActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_add);
+		
+		//grab reference to app context
+		_context = this;
 		
 		//grab our interface elements
 		datePicker = (DatePicker) findViewById(R.id.add_date);
@@ -65,17 +74,36 @@ public class AddActivity extends Activity{
 					//set the ACL property so this is only accessible to the currently logged in user
 					eventObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
 					//save to Parse
-					eventObject.saveInBackground();
-					
-					//return to the 'view' activity
-					finish();					
+					eventObject.saveInBackground(new SaveCallback() {
+
+						@Override
+						public void done(ParseException e) {
+							//return to the 'view' activity
+							finish();
+						}
+						
+					});					
 				} else {
 					//no name was entered, so prompt the user to pick a name
-				}
-				
-				
-			}
-			
+					AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
+					alertBuilder.setMessage("Please input a valid name");
+					alertBuilder.setCancelable(true);
+	
+					//set up listener for our 'okay' button
+					alertBuilder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// cancel the dialog
+							dialog.cancel();				
+						}
+					});
+					
+					//build alert and show it!
+					AlertDialog logoutAlert = alertBuilder.create();
+					logoutAlert.show();
+				}				
+			}			
 		});
 	}
 	

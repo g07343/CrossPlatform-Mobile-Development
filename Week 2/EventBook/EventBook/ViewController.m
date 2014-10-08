@@ -23,6 +23,7 @@
     
     //hide our error text by default
     errorText.hidden = true;
+    errorText.numberOfLines = 3;
     
     // parse test
     //PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
@@ -42,19 +43,36 @@
 
 //method to run whenever the user taps a button within the login form
 -(IBAction)onClick:(id)sender {
+    //grab all data we'll need
+    NSString *name = userName.text;
+    NSString *pass = password.text;
+    int nameLength = name.length;
+    int passLength = pass.length;
+    
     //cast a button object to the 'sender' id so we can differentiate between the two
     UIButton *button = (UIButton*)sender;
     if (button.tag == 0)
     {//login button tapped
-        NSLog(@"login button tapped!");
+        if (nameLength > 0) {
+            if (passLength > 0) {
+                //attempt to log in the user using the supplied credentials
+                [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
+                    if (user) {
+                        //log in successful, send to 'view' activity
+                        
+                    } else {
+                       //error logging in, alert user
+                        [self showError:@"login"];
+                    }
+                }];
+            } else {
+                [self showError:@"password"];
+            }
+        } else {
+            [self showError:@"userName"];
+        }
     } else if (button.tag == 1) {
         //create new button tapped
-        NSLog(@"new button tapped!");
-        NSString *name = userName.text;
-        NSString *pass = password.text;
-        int nameLength = name.length;
-        int passLength = pass.length;
-        
         NSLog(@"Username is:  %@ and password is: %@", name, pass);
         NSLog(@"Length of username is:  %d", nameLength);
         
@@ -100,6 +118,8 @@
         errorText.text = @"Please input a valid user name";
     } else if ([errorString  isEqual: @"signUp"]) {
         errorText.text = @"Account already exists.  Please try logging in";
+    } else if ([errorString  isEqual: @"login"]) {
+        errorText.text = @"Either your user name or password was incorrect.  Please try again";
     }
     //ensure the text is visible
     errorText.hidden = false;

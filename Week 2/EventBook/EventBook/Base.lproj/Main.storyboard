@@ -71,7 +71,11 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gHN-xa-BvZ">
-                                <rect key="frame" x="266" y="468" width="84" height="21"/>
+                                <rect key="frame" x="184" y="468" width="250" height="81"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="81" id="gjd-pf-hck"/>
+                                    <constraint firstAttribute="width" constant="250" id="vy2-BE-U4J"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.01085100634" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -87,7 +91,7 @@
                             <constraint firstAttribute="trailing" secondItem="xQY-hm-dYj" secondAttribute="trailing" constant="31" id="B5d-3R-MlA"/>
                             <constraint firstItem="7mf-qh-9Z2" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="BTE-Jw-r80"/>
                             <constraint firstItem="M96-40-tYi" firstAttribute="top" secondItem="nWE-3J-xri" secondAttribute="bottom" constant="115" id="H2J-47-TaR"/>
-                            <constraint firstAttribute="centerXWithinMargins" secondItem="gHN-xa-BvZ" secondAttribute="centerXWithinMargins" constant="-8" id="HCR-2b-8cl"/>
+                            <constraint firstAttribute="centerXWithinMargins" secondItem="gHN-xa-BvZ" secondAttribute="centerXWithinMargins" constant="-9" id="HCR-2b-8cl"/>
                             <constraint firstAttribute="trailing" secondItem="nWE-3J-xri" secondAttribute="trailing" constant="31" id="LrV-KM-ycm"/>
                             <constraint firstItem="yg4-P9-xDt" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="87" id="T4p-7x-72c"/>
                             <constraint firstItem="v27-Rm-ffB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="96" id="T94-Ex-7rQ"/>
@@ -112,7 +116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="203" y="136"/>
+            <point key="canvasLocation" x="285" y="76"/>
         </scene>
     </scenes>
 </document>

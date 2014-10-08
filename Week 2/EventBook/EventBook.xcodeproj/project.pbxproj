@@ -14,6 +14,19 @@
 		C93198A819E385E100E46E22 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C93198A719E385E100E46E22 /* Images.xcassets */; };
 		C93198AB19E385E100E46E22 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C93198A919E385E100E46E22 /* LaunchScreen.xib */; };
 		C93198B719E385E100E46E22 /* EventBookTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C93198B619E385E100E46E22 /* EventBookTests.m */; };
+		C94B242919E4D9B400005DEF /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242619E4D9B400005DEF /* Bolts.framework */; };
+		C94B242A19E4D9B400005DEF /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242719E4D9B400005DEF /* Parse.framework */; };
+		C94B242B19E4D9B400005DEF /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */; };
+		C94B242D19E4DA0300005DEF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242C19E4DA0300005DEF /* AudioToolbox.framework */; };
+		C94B242F19E4DA0800005DEF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242E19E4DA0800005DEF /* CFNetwork.framework */; };
+		C94B243119E4DA1000005DEF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243019E4DA1000005DEF /* CoreGraphics.framework */; };
+		C94B243319E4DA1600005DEF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243219E4DA1600005DEF /* CoreLocation.framework */; };
+		C94B243519E4DA2C00005DEF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243419E4DA2C00005DEF /* libz.dylib */; };
+		C94B243719E4DA3800005DEF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243619E4DA3800005DEF /* MobileCoreServices.framework */; };
+		C94B243919E4DA4A00005DEF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243819E4DA4A00005DEF /* QuartzCore.framework */; };
+		C94B243B19E4DA5300005DEF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243A19E4DA5300005DEF /* Security.framework */; };
+		C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243C19E4DA5B00005DEF /* StoreKit.framework */; };
+		C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +53,19 @@
 		C93198B019E385E100E46E22 /* EventBookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventBookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C93198B519E385E100E46E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C93198B619E385E100E46E22 /* EventBookTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBookTests.m; sourceTree = "<group>"; };
+		C94B242619E4D9B400005DEF /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = EventBook/Bolts.framework; sourceTree = "<group>"; };
+		C94B242719E4D9B400005DEF /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = EventBook/Parse.framework; sourceTree = "<group>"; };
+		C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = EventBook/ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		C94B242C19E4DA0300005DEF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		C94B242E19E4DA0800005DEF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243019E4DA1000005DEF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243219E4DA1600005DEF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243419E4DA2C00005DEF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		C94B243619E4DA3800005DEF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243819E4DA4A00005DEF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243A19E4DA5300005DEF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243C19E4DA5B00005DEF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +73,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */,
+				C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */,
+				C94B243B19E4DA5300005DEF /* Security.framework in Frameworks */,
+				C94B243919E4DA4A00005DEF /* QuartzCore.framework in Frameworks */,
+				C94B243719E4DA3800005DEF /* MobileCoreServices.framework in Frameworks */,
+				C94B243519E4DA2C00005DEF /* libz.dylib in Frameworks */,
+				C94B243319E4DA1600005DEF /* CoreLocation.framework in Frameworks */,
+				C94B243119E4DA1000005DEF /* CoreGraphics.framework in Frameworks */,
+				C94B242F19E4DA0800005DEF /* CFNetwork.framework in Frameworks */,
+				C94B242D19E4DA0300005DEF /* AudioToolbox.framework in Frameworks */,
+				C94B242A19E4D9B400005DEF /* Parse.framework in Frameworks */,
+				C94B242919E4D9B400005DEF /* Bolts.framework in Frameworks */,
+				C94B242B19E4D9B400005DEF /* ParseFacebookUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +102,7 @@
 		C931988E19E385E100E46E22 = {
 			isa = PBXGroup;
 			children = (
+				C94B242519E4D95000005DEF /* Frameworks */,
 				C931989919E385E100E46E22 /* EventBook */,
 				C93198B319E385E100E46E22 /* EventBookTests */,
 				C931989819E385E100E46E22 /* Products */,
@@ -117,6 +157,26 @@
 				C93198B519E385E100E46E22 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C94B242519E4D95000005DEF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */,
+				C94B243C19E4DA5B00005DEF /* StoreKit.framework */,
+				C94B243A19E4DA5300005DEF /* Security.framework */,
+				C94B243819E4DA4A00005DEF /* QuartzCore.framework */,
+				C94B243619E4DA3800005DEF /* MobileCoreServices.framework */,
+				C94B243419E4DA2C00005DEF /* libz.dylib */,
+				C94B243219E4DA1600005DEF /* CoreLocation.framework */,
+				C94B243019E4DA1000005DEF /* CoreGraphics.framework */,
+				C94B242E19E4DA0800005DEF /* CFNetwork.framework */,
+				C94B242C19E4DA0300005DEF /* AudioToolbox.framework */,
+				C94B242619E4D9B400005DEF /* Bolts.framework */,
+				C94B242719E4D9B400005DEF /* Parse.framework */,
+				C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -345,6 +405,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EventBook",
+				);
 				INFOPLIST_FILE = EventBook/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -360,6 +424,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EventBook",
+				);
 				INFOPLIST_FILE = EventBook/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

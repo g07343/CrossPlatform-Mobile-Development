@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F79EF83F-CFCA-4ED0-8DE0-CB86F6454B9E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>EventBook</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7A59A5C9B446E29AB92A4E69556ABB31F22DD72D</key>
+		<string>https://github.com/g07343/CrossPlatform-Mobile-Development.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Week 2/EventBook/EventBook.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7A59A5C9B446E29AB92A4E69556ABB31F22DD72D</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/g07343/CrossPlatform-Mobile-Development.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7A59A5C9B446E29AB92A4E69556ABB31F22DD72D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7A59A5C9B446E29AB92A4E69556ABB31F22DD72D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CrossPlatform-Mobile-Development</string>
+		</dict>
+	</array>
+</dict>
+</plist>

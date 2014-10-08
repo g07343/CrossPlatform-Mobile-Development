@@ -1,19 +1,22 @@
 //
-//  ViewController.m
+//  LoginViewController.m
 //  EventBook
 //
 //  Created by Matthew Lewis on 10/6/14.
 //  Copyright (c) 2014 com.fullsail. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "LoginViewController.h"
 #import <Parse/Parse.h>
+#import "EventsViewController.h"
 
-@interface ViewController ()
+@interface LoginViewController ()
 
 @end
 
-@implementation ViewController
+@implementation LoginViewController
+
+bool rememberMe = false;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -24,16 +27,42 @@
     //hide our error text by default
     errorText.hidden = true;
     errorText.numberOfLines = 3;
-    
-    // parse test
-    //PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
-    //testObject[@"foo"] = @"bar";
-    //[testObject saveInBackground];
-    
+
     //add listeners for when the keyboard appears and disappears
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:)name:UIKeyboardWillHideNotification object:nil];
+    
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    //immediately check if there is previously saved 'remember me' value in user defaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    //check if the grabbed bool is nill, meaning it wasn't previously stored
+    if ([defaults objectForKey:@"rememberUser"] != nil) {
+        //the key was found within prefs so grab it and check it
+        bool savePref = [defaults objectForKey:@"rememberUser"];
+        if (savePref == false) {
+            [PFUser logOut];
+        } else {
+            //user wanted to be remembered, so make sure we have a valid user
+            PFUser *currentUser = [PFUser currentUser];
+            if (currentUser != nil) {
+                NSLog(@"User was NOT nill");
+                //previously logged in user found, so send to 'view' activity
+                UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                [self presentViewController:eventView animated:YES completion:nil];
+            } else {
+                NSLog(@"User was found to be nill...");
+            }
+            
+        }
+    } else {
+        NSLog(@"KEY NOT FOUND");
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,8 +75,8 @@
     //grab all data we'll need
     NSString *name = userName.text;
     NSString *pass = password.text;
-    int nameLength = name.length;
-    int passLength = pass.length;
+    NSUInteger nameLength = name.length;
+    NSUInteger passLength = pass.length;
     
     //cast a button object to the 'sender' id so we can differentiate between the two
     UIButton *button = (UIButton*)sender;
@@ -59,6 +88,9 @@
                 [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
                     if (user) {
                         //log in successful, send to 'view' activity
+                        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                        [self presentViewController:eventView animated:YES completion:nil];
                         
                     } else {
                        //error logging in, alert user
@@ -74,7 +106,7 @@
     } else if (button.tag == 1) {
         //create new button tapped
         NSLog(@"Username is:  %@ and password is: %@", name, pass);
-        NSLog(@"Length of username is:  %d", nameLength);
+        NSLog(@"Length of username is:  %lu", (unsigned long)nameLength);
         
         //ensure the user input a username and password
         if (nameLength > 0) {
@@ -134,5 +166,22 @@
 -(void)keyboardWillHide:(NSNotification *)notification {
     //hide our 'close' button again
     closeButton.hidden = true;
+}
+
+//we can use this to tell when the user toggles the 'remember me' switch within the interface
+-(IBAction)valueChanged:(UISwitch*)sender {
+    //grab a reference to user defaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if (rememberMe == false) {
+        //add correct value to user defaults
+        [defaults setBool:true forKey:@"rememberUser"];
+        rememberMe = true;
+    } else {
+        [defaults setBool:false forKey:@"rememberUser"];
+        rememberMe = false;
+    }
+    //synchronize defaults to system memory
+    [defaults synchronize];
 }
 @end

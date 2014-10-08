@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Login View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -28,8 +28,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="grE-xc-fAC">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="grE-xc-fAC">
                                 <rect key="frame" x="28" y="268" width="51" height="31"/>
+                                <connections>
+                                    <action selector="valueChanged:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z8v-cm-agf"/>
+                                </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Keep me logged in?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WDA-9U-Yqv">
                                 <rect key="frame" x="96" y="275" width="138" height="18"/>
@@ -117,6 +120,58 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="285" y="76"/>
+        </scene>
+        <!--Events View Controller-->
+        <scene sceneID="tJc-Qw-5A6">
+            <objects>
+                <viewController storyboardIdentifier="EventsViewController" id="mpQ-xK-oEq" customClass="EventsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Egg-tQ-Tgp"/>
+                        <viewControllerLayoutGuide type="bottom" id="9gQ-nq-jVe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AHz-Wj-N1R">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfQ-BP-car">
+                                <rect key="frame" x="16" y="20" width="49" height="30"/>
+                                <state key="normal" title="Logout">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClick:" destination="mpQ-xK-oEq" eventType="touchUpInside" id="YR3-mu-XP4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7e4-R2-Ehu">
+                                <rect key="frame" x="562" y="24" width="22" height="22"/>
+                                <state key="normal">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClick:" destination="mpQ-xK-oEq" eventType="touchUpInside" id="Frn-1e-wcB"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Events View Controller" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2s-Ib-Kb3">
+                                <rect key="frame" x="214" y="65" width="173" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7e4-R2-Ehu" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="4" id="6ky-n6-6pa"/>
+                            <constraint firstItem="kfQ-BP-car" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" id="8Em-T1-3PG"/>
+                            <constraint firstItem="F2s-Ib-Kb3" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="45" id="F8b-PI-HLC"/>
+                            <constraint firstAttribute="trailing" secondItem="7e4-R2-Ehu" secondAttribute="trailing" constant="16" id="XTz-Xp-1fD"/>
+                            <constraint firstItem="kfQ-BP-car" firstAttribute="leading" secondItem="AHz-Wj-N1R" secondAttribute="leading" constant="16" id="dVm-WG-TL8"/>
+                            <constraint firstAttribute="centerX" secondItem="F2s-Ib-Kb3" secondAttribute="centerX" constant="-0.5" id="x6h-KX-j6U"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dfB-D6-agJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1042" y="76"/>
         </scene>
     </scenes>
 </document>

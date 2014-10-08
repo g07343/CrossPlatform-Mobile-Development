@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		C931989D19E385E100E46E22 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C931989C19E385E100E46E22 /* main.m */; };
 		C93198A019E385E100E46E22 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C931989F19E385E100E46E22 /* AppDelegate.m */; };
-		C93198A319E385E100E46E22 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C93198A219E385E100E46E22 /* ViewController.m */; };
+		C93198A319E385E100E46E22 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C93198A219E385E100E46E22 /* LoginViewController.m */; };
 		C93198A619E385E100E46E22 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C93198A419E385E100E46E22 /* Main.storyboard */; };
 		C93198A819E385E100E46E22 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C93198A719E385E100E46E22 /* Images.xcassets */; };
 		C93198AB19E385E100E46E22 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C93198A919E385E100E46E22 /* LaunchScreen.xib */; };
@@ -27,6 +27,7 @@
 		C94B243B19E4DA5300005DEF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243A19E4DA5300005DEF /* Security.framework */; };
 		C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243C19E4DA5B00005DEF /* StoreKit.framework */; };
 		C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */; };
+		C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94B244119E5D97D00005DEF /* EventsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,8 +46,8 @@
 		C931989C19E385E100E46E22 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C931989E19E385E100E46E22 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C931989F19E385E100E46E22 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		C93198A119E385E100E46E22 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		C93198A219E385E100E46E22 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C93198A119E385E100E46E22 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		C93198A219E385E100E46E22 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		C93198A519E385E100E46E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C93198A719E385E100E46E22 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C93198AA19E385E100E46E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -66,6 +67,8 @@
 		C94B243A19E4DA5300005DEF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		C94B243C19E4DA5B00005DEF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		C94B244019E5D97D00005DEF /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
+		C94B244119E5D97D00005DEF /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,8 +126,10 @@
 			children = (
 				C931989E19E385E100E46E22 /* AppDelegate.h */,
 				C931989F19E385E100E46E22 /* AppDelegate.m */,
-				C93198A119E385E100E46E22 /* ViewController.h */,
-				C93198A219E385E100E46E22 /* ViewController.m */,
+				C93198A119E385E100E46E22 /* LoginViewController.h */,
+				C93198A219E385E100E46E22 /* LoginViewController.m */,
+				C94B244019E5D97D00005DEF /* EventsViewController.h */,
+				C94B244119E5D97D00005DEF /* EventsViewController.m */,
 				C93198A419E385E100E46E22 /* Main.storyboard */,
 				C93198A719E385E100E46E22 /* Images.xcassets */,
 				C93198A919E385E100E46E22 /* LaunchScreen.xib */,
@@ -279,7 +284,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C93198A319E385E100E46E22 /* ViewController.m in Sources */,
+				C93198A319E385E100E46E22 /* LoginViewController.m in Sources */,
+				C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */,
 				C93198A019E385E100E46E22 /* AppDelegate.m in Sources */,
 				C931989D19E385E100E46E22 /* main.m in Sources */,
 			);

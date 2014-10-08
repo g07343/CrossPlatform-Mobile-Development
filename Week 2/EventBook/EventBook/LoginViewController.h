@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  LoginViewController.h
 //  EventBook
 //
 //  Created by Matthew Lewis on 10/6/14.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface LoginViewController : UIViewController
 {
     IBOutlet UITextField *userName;
     IBOutlet UITextField *password;
@@ -18,6 +18,7 @@
 }
 
 -(IBAction)onClick:(id)sender;
+-(IBAction)valueChanged:(UISwitch*)sender;
 
 @end
 

@@ -30,9 +30,6 @@
                             </textField>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="grE-xc-fAC">
                                 <rect key="frame" x="28" y="268" width="51" height="31"/>
-                                <connections>
-                                    <action selector="valueChanged:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z8v-cm-agf"/>
-                                </connections>
                             </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Keep me logged in?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WDA-9U-Yqv">
                                 <rect key="frame" x="96" y="275" width="138" height="18"/>

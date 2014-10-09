@@ -18,7 +18,6 @@
 }
 
 -(IBAction)onClick:(id)sender;
--(IBAction)valueChanged:(UISwitch*)sender;
 
 @end
 

@@ -42,7 +42,8 @@ bool rememberMe = false;
     //check if the grabbed bool is nill, meaning it wasn't previously stored
     if ([defaults objectForKey:@"rememberUser"] != nil) {
         //the key was found within prefs so grab it and check it
-        bool savePref = [defaults objectForKey:@"rememberUser"];
+        bool savePref = [defaults boolForKey:@"rememberUser"];
+        NSLog(@"bool found is prefs was:  %@", (savePref) ? @"YES" : @"NO");
         if (savePref == false) {
             [PFUser logOut];
         } else {
@@ -92,6 +93,15 @@ bool rememberMe = false;
                         //clear out our password field so it doesn't retain the user's password
                         password.text = @"";
                         
+                        //record the 'remember me' preference
+                    
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        if ([saveToggle isOn]) {
+                            [defaults setBool:true forKey:@"rememberUser"];
+                        } else {
+                            [defaults setBool:false forKey:@"rememberUser"];
+                        }
+                        [defaults synchronize];
                         //ensure our error text is invisible, in case the user logs out from the 'view' activity
                         errorText.hidden = true;
                         [self presentViewController:eventView animated:YES completion:nil];
@@ -130,6 +140,15 @@ bool rememberMe = false;
                         //clear out our password field so it doesn't retain the user's password
                         password.text = @"";
                         
+                        //record the 'remember me' preference
+                        
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        if (saveToggle.isOn) {
+                            [defaults setBool:true forKey:@"rememberUser"];
+                        } else {
+                            [defaults setBool:false forKey:@"rememberUser"];
+                        }
+                        [defaults synchronize];
                         //ensure our error text is invisible, in case the user logs out from the 'view' activity
                         errorText.hidden = true;
                         [self presentViewController:eventView animated:YES completion:nil];
@@ -181,19 +200,19 @@ bool rememberMe = false;
 }
 
 //we can use this to tell when the user toggles the 'remember me' switch within the interface
--(IBAction)valueChanged:(UISwitch*)sender {
-    //grab a reference to user defaults
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    if (rememberMe == false) {
-        //add correct value to user defaults
-        [defaults setBool:true forKey:@"rememberUser"];
-        rememberMe = true;
-    } else {
-        [defaults setBool:false forKey:@"rememberUser"];
-        rememberMe = false;
-    }
-    //synchronize defaults to system memory
-    [defaults synchronize];
-}
+//-(IBAction)valueChanged:(UISwitch*)sender {
+//    //grab a reference to user defaults
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    
+//    if (rememberMe == false) {
+//        //add correct value to user defaults
+//        [defaults setBool:true forKey:@"rememberUser"];
+//        rememberMe = true;
+//    } else {
+//        [defaults setBool:false forKey:@"rememberUser"];
+//        rememberMe = false;
+//    }
+//    //synchronize defaults to system memory
+//    [defaults synchronize];
+//}
 @end

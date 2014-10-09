@@ -45,6 +45,7 @@ int selectedEvent;
     [self updateTableView];
 }
 
+
 -(void)updateTableView {
     //grab whatever events are stored on Parse for this account
     PFQuery *query = [PFQuery queryWithClassName:@"Event"];

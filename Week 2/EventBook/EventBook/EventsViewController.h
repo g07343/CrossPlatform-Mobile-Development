@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EventsViewController : UIViewController
+@interface EventsViewController : UIViewController <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
-
+    IBOutlet UITableView *tableView;
 }
 
 -(IBAction)onClick:(id)sender;

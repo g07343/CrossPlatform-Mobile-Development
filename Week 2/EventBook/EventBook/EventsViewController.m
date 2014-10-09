@@ -10,11 +10,14 @@
 #import <Parse/Parse.h>
 #import "AddViewController.h"
 
-@interface EventsViewController () <UIAlertViewDelegate>
+@interface EventsViewController () 
 
 @end
 
 @implementation EventsViewController
+
+NSMutableArray *eventArray;
+NSMutableArray *eventIds;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -24,6 +27,64 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    NSLog(@"viewWillAppear runs!");
+    [self updateTableView];
+}
+
+-(void)updateTableView {
+    NSLog(@"updateTableView runs!");
+    //grab whatever events are stored on Parse for this account
+    PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // set up our arrays to store data
+            eventArray = [NSMutableArray arrayWithCapacity:objects.count];
+            eventIds = [NSMutableArray arrayWithCapacity:objects.count];
+            
+            // grab the data we need from each found event
+            for (int i = 0; i < objects.count; i ++) {
+                PFObject *object = objects[i];
+                NSString *eventTitle = object[@"name"];
+                int month = [[object objectForKey:@"month"] intValue];
+                int day = [[object objectForKey:@"day"] intValue];
+                int hour = [[object objectForKey:@"hour"] intValue];
+                int minute = [[object objectForKey:@"minute"] intValue];
+                NSString *eventId = object.objectId;
+                NSString *formattedString = [NSString stringWithFormat:@"%@ :  %d / %d  at  %d : %d", eventTitle, month, day, hour, minute];
+                
+                //add final values to our arrays used to populate our table view
+                eventArray[i] = formattedString;
+                eventIds[i] = eventId;
+            }
+            
+            
+            [tableView reloadData];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [eventArray count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *simpleTableIdentifier = @"SimpleTableCell";
+    UITableViewCell *cell = [tableView1 dequeueReusableCellWithIdentifier:simpleTableIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+    }
+    
+    cell.textLabel.text = [eventArray objectAtIndex:indexPath.row];
+    return cell;
 }
 
 /*

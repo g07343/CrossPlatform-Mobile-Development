@@ -151,6 +151,17 @@
                                     <action selector="onClick:" destination="mpQ-xK-oEq" eventType="touchUpInside" id="Frn-1e-wcB"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qwQ-vi-Kea">
+                                <rect key="frame" x="150" y="111" width="300" height="481"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="HxN-lg-61h"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="mpQ-xK-oEq" id="OkC-7I-hx5"/>
+                                    <outlet property="delegate" destination="mpQ-xK-oEq" id="jMd-Z5-w60"/>
+                                </connections>
+                            </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Events View Controller" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2s-Ib-Kb3">
                                 <rect key="frame" x="214" y="65" width="173" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -162,12 +173,18 @@
                         <constraints>
                             <constraint firstItem="7e4-R2-Ehu" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="4" id="6ky-n6-6pa"/>
                             <constraint firstItem="kfQ-BP-car" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" id="8Em-T1-3PG"/>
+                            <constraint firstItem="9gQ-nq-jVe" firstAttribute="top" secondItem="qwQ-vi-Kea" secondAttribute="bottom" constant="8" id="Cbz-BL-4qh"/>
                             <constraint firstItem="F2s-Ib-Kb3" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="45" id="F8b-PI-HLC"/>
+                            <constraint firstAttribute="centerX" secondItem="qwQ-vi-Kea" secondAttribute="centerX" id="QsJ-rQ-Fyx"/>
+                            <constraint firstItem="qwQ-vi-Kea" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="91" id="XFz-8Y-7gI"/>
                             <constraint firstAttribute="trailing" secondItem="7e4-R2-Ehu" secondAttribute="trailing" constant="16" id="XTz-Xp-1fD"/>
                             <constraint firstItem="kfQ-BP-car" firstAttribute="leading" secondItem="AHz-Wj-N1R" secondAttribute="leading" constant="16" id="dVm-WG-TL8"/>
                             <constraint firstAttribute="centerX" secondItem="F2s-Ib-Kb3" secondAttribute="centerX" constant="-0.5" id="x6h-KX-j6U"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="qwQ-vi-Kea" id="g0w-jU-B2h"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dfB-D6-agJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

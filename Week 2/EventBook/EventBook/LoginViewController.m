@@ -199,20 +199,4 @@ bool rememberMe = false;
     closeButton.hidden = true;
 }
 
-//we can use this to tell when the user toggles the 'remember me' switch within the interface
-//-(IBAction)valueChanged:(UISwitch*)sender {
-//    //grab a reference to user defaults
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    
-//    if (rememberMe == false) {
-//        //add correct value to user defaults
-//        [defaults setBool:true forKey:@"rememberUser"];
-//        rememberMe = true;
-//    } else {
-//        [defaults setBool:false forKey:@"rememberUser"];
-//        rememberMe = false;
-//    }
-//    //synchronize defaults to system memory
-//    [defaults synchronize];
-//}
 @end

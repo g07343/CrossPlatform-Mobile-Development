@@ -45,7 +45,8 @@ int selectedEvent;
     [self updateTableView];
 }
 
-
+//this method is responsible for keeping our table view updated with the remote data,
+//and is fired whenever this activity becomes visible, or when the user deletes and item
 -(void)updateTableView {
     //grab whatever events are stored on Parse for this account
     PFQuery *query = [PFQuery queryWithClassName:@"Event"];
@@ -102,16 +103,6 @@ int selectedEvent;
     cell.textLabel.text = [eventArray objectAtIndex:indexPath.row];
     return cell;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 -(IBAction)onClick:(id)sender {
     UIButton *button = (UIButton*)sender;

@@ -8,8 +8,9 @@
 
 #import "EventsViewController.h"
 #import <Parse/Parse.h>
+#import "AddViewController.h"
 
-@interface EventsViewController ()
+@interface EventsViewController () <UIAlertViewDelegate>
 
 @end
 
@@ -39,12 +40,21 @@
     UIButton *button = (UIButton*)sender;
     if (button.tag == 0) {
         //user tapped the 'logout' button
-        [PFUser logOut];
-        [self dismissViewControllerAnimated:true completion:nil];
         
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logout?" message:@"Are you sure you want to return to the login screen?  You will be logged out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+        [alert show];
     } else if (button.tag == 1) {
         //user tapped the 'add' button
-        
+        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UIViewController *addView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"AddViewController"];
+        [self presentViewController:addView animated:YES completion:nil];
+    }
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [PFUser logOut];
+        [self dismissViewControllerAnimated:true completion:nil];
     }
 }
 

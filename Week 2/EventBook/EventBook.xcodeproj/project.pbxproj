@@ -28,6 +28,7 @@
 		C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243C19E4DA5B00005DEF /* StoreKit.framework */; };
 		C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */; };
 		C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94B244119E5D97D00005DEF /* EventsViewController.m */; };
+		C94B244519E5EA9C00005DEF /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94B244419E5EA9C00005DEF /* AddViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,8 @@
 		C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		C94B244019E5D97D00005DEF /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
 		C94B244119E5D97D00005DEF /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
+		C94B244319E5EA9C00005DEF /* AddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		C94B244419E5EA9C00005DEF /* AddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +133,8 @@
 				C93198A219E385E100E46E22 /* LoginViewController.m */,
 				C94B244019E5D97D00005DEF /* EventsViewController.h */,
 				C94B244119E5D97D00005DEF /* EventsViewController.m */,
+				C94B244319E5EA9C00005DEF /* AddViewController.h */,
+				C94B244419E5EA9C00005DEF /* AddViewController.m */,
 				C93198A419E385E100E46E22 /* Main.storyboard */,
 				C93198A719E385E100E46E22 /* Images.xcassets */,
 				C93198A919E385E100E46E22 /* LaunchScreen.xib */,
@@ -284,6 +289,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94B244519E5EA9C00005DEF /* AddViewController.m in Sources */,
 				C93198A319E385E100E46E22 /* LoginViewController.m in Sources */,
 				C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */,
 				C93198A019E385E100E46E22 /* AppDelegate.m in Sources */,

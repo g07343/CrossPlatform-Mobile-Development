@@ -173,5 +173,99 @@
             </objects>
             <point key="canvasLocation" x="1042" y="76"/>
         </scene>
+        <!--Add View Controller-->
+        <scene sceneID="byr-vT-sbc">
+            <objects>
+                <viewController storyboardIdentifier="AddViewController" id="fgm-GG-TmG" customClass="AddViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dHK-ZO-eOa"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ucq-cm-vBk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nyL-Od-qpp">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cnc-qg-HJ2">
+                                <rect key="frame" x="16" y="20" width="48" height="30"/>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClick:" destination="fgm-GG-TmG" eventType="touchUpInside" id="zl5-QN-l3J"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Event Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ljO-9E-val">
+                                <rect key="frame" x="168" y="96" width="264" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="264" id="OJV-b4-c4K"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name your event" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cpY-eh-swF">
+                                <rect key="frame" x="235" y="60" width="131" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="When is the event?" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uig-mN-b5u">
+                                <rect key="frame" x="227" y="190" width="147" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="cHm-1J-Shu">
+                                <rect key="frame" x="140" y="219" width="320" height="162"/>
+                                <date key="date" timeIntervalSinceReferenceDate="434498948.39216697">
+                                    <!--2014-10-08 22:09:08 +0000-->
+                                </date>
+                            </datePicker>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hxj-NI-A6z">
+                                <rect key="frame" x="262" y="445" width="77" height="30"/>
+                                <state key="normal" title="Save Event">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClick:" destination="fgm-GG-TmG" eventType="touchUpInside" id="KY5-Je-E4W"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6V-Ff-xmx">
+                                <rect key="frame" x="476" y="20" width="108" height="30"/>
+                                <state key="normal" title="Close keyboard">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onClick:" destination="fgm-GG-TmG" eventType="touchUpInside" id="vkd-u8-giO"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="cpY-eh-swF" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" constant="40" id="1b4-cN-HHD"/>
+                            <constraint firstItem="hxj-NI-A6z" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" constant="425" id="6XY-da-uI1"/>
+                            <constraint firstItem="cHm-1J-Shu" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" constant="199" id="80O-Vc-Ohu"/>
+                            <constraint firstAttribute="centerXWithinMargins" secondItem="cpY-eh-swF" secondAttribute="centerXWithinMargins" constant="-0.5" id="EoY-yK-vNN"/>
+                            <constraint firstItem="h6V-Ff-xmx" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" id="QhW-Hz-ap0"/>
+                            <constraint firstItem="ljO-9E-val" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" constant="76" id="RYB-nR-9xp"/>
+                            <constraint firstAttribute="centerX" secondItem="cHm-1J-Shu" secondAttribute="centerX" id="SZJ-sj-9LL"/>
+                            <constraint firstItem="cnc-qg-HJ2" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" id="VpM-de-61Y"/>
+                            <constraint firstAttribute="trailing" secondItem="h6V-Ff-xmx" secondAttribute="trailing" constant="16" id="XN9-Mn-Lak"/>
+                            <constraint firstItem="uig-mN-b5u" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" constant="170" id="Yj9-yU-DqT"/>
+                            <constraint firstAttribute="centerX" secondItem="hxj-NI-A6z" secondAttribute="centerX" constant="-0.5" id="jeq-gT-dhu"/>
+                            <constraint firstItem="cHm-1J-Shu" firstAttribute="top" secondItem="dHK-ZO-eOa" secondAttribute="bottom" constant="199" id="jiz-l8-11h"/>
+                            <constraint firstAttribute="centerX" secondItem="uig-mN-b5u" secondAttribute="centerX" constant="-0.5" id="l4R-Jg-gBt"/>
+                            <constraint firstAttribute="centerXWithinMargins" secondItem="ljO-9E-val" secondAttribute="centerXWithinMargins" id="wip-B4-VHh"/>
+                            <constraint firstItem="cnc-qg-HJ2" firstAttribute="leading" secondItem="nyL-Od-qpp" secondAttribute="leading" constant="16" id="yNL-Pt-cQV"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="datePicker" destination="cHm-1J-Shu" id="J63-EQ-WFg"/>
+                        <outlet property="eventNameField" destination="ljO-9E-val" id="5gr-qK-VUn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x8l-z5-Z1S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1846" y="78"/>
+        </scene>
     </scenes>
 </document>

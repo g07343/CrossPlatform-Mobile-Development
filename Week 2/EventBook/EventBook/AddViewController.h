@@ -12,6 +12,7 @@
 {
     IBOutlet UITextField *eventNameField;
     IBOutlet UIDatePicker *datePicker;
+    IBOutlet UIButton *closeKeyboard;
 }
 
 -(IBAction)onClick:(id)sender;

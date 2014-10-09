@@ -162,9 +162,12 @@
                                     <outlet property="delegate" destination="mpQ-xK-oEq" id="jMd-Z5-w60"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Events View Controller" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2s-Ib-Kb3">
-                                <rect key="frame" x="214" y="65" width="173" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your events:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2s-Ib-Kb3">
+                                <rect key="frame" x="152" y="65" width="298" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="298" id="Ajj-16-RrP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -183,12 +186,13 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="tableLabel" destination="F2s-Ib-Kb3" id="huQ-5n-b9M"/>
                         <outlet property="tableView" destination="qwQ-vi-Kea" id="g0w-jU-B2h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dfB-D6-agJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1042" y="76"/>
+            <point key="canvasLocation" x="1148" y="76"/>
         </scene>
         <!--Add View Controller-->
         <scene sceneID="byr-vT-sbc">
@@ -276,6 +280,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="closeKeyboard" destination="h6V-Ff-xmx" id="Mjn-ls-cAY"/>
                         <outlet property="datePicker" destination="cHm-1J-Shu" id="J63-EQ-WFg"/>
                         <outlet property="eventNameField" destination="ljO-9E-val" id="5gr-qK-VUn"/>
                     </connections>

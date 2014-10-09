@@ -26,6 +26,9 @@ int selectedEvent;
     // set up a long press gesture listener for use with our table view
     UILongPressGestureRecognizer *longRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressed:)];
     [tableView addGestureRecognizer:longRecognizer];
+    
+    //set numLines for tableLabel here, because doing it on the storyboard generates an annoying warning
+    tableLabel.numberOfLines = 2;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,6 +37,10 @@ int selectedEvent;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    //reset our label by default
+    tableLabel.text = @"Your events:";
+    tableLabel.textColor = [UIColor blackColor];
+    
     //ensure we're updating the table view whenever the view appears
     [self updateTableView];
 }
@@ -48,22 +55,27 @@ int selectedEvent;
             eventArray = [NSMutableArray arrayWithCapacity:objects.count];
             eventIds = [NSMutableArray arrayWithCapacity:objects.count];
             
-            // grab the data we need from each found event
-            for (int i = 0; i < objects.count; i ++) {
-                PFObject *object = objects[i];
-                NSString *eventTitle = object[@"name"];
-                int month = [[object objectForKey:@"month"] intValue];
-                int day = [[object objectForKey:@"day"] intValue];
-                int hour = [[object objectForKey:@"hour"] intValue];
-                int minute = [[object objectForKey:@"minute"] intValue];
-                NSString *eventId = object.objectId;
-                NSString *formattedString = [NSString stringWithFormat:@"%@ :  %d / %d  at  %d : %d", eventTitle, month, day, hour, minute];
-                
-                //add final values to our arrays used to populate our table view
-                eventArray[i] = formattedString;
-                eventIds[i] = eventId;
+            if (objects.count > 0) {
+                // grab the data we need from each found event
+                for (int i = 0; i < objects.count; i ++) {
+                    PFObject *object = objects[i];
+                    NSString *eventTitle = object[@"name"];
+                    int month = [[object objectForKey:@"month"] intValue];
+                    int day = [[object objectForKey:@"day"] intValue];
+                    int hour = [[object objectForKey:@"hour"] intValue];
+                    int minute = [[object objectForKey:@"minute"] intValue];
+                    NSString *eventId = object.objectId;
+                    NSString *formattedString = [NSString stringWithFormat:@"%@:  %d/%d  at  %d:%d", eventTitle, month, day, hour, minute];
+                    
+                    //add final values to our arrays used to populate our table view
+                    eventArray[i] = formattedString;
+                    eventIds[i] = eventId;
+                }
+            } else {
+                //no events saved to this account, so modify text view to inform user
+                tableLabel.text = @"No events found.  Tap the '+' button above to get started!";
+                tableLabel.textColor = [UIColor redColor];
             }
-            
             
             [tableView reloadData];
         } else {

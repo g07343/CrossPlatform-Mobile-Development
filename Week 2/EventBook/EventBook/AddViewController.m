@@ -21,6 +21,14 @@ NSDate *selectedDate;
     [super viewDidLoad];
     // add listener to our date picker to keep track of the date selected
     [datePicker addTarget:self action:@selector(dateChanged) forControlEvents:UIControlEventValueChanged];
+    
+    //hide keyboard button by default
+    closeKeyboard.hidden = true;
+    
+    //add listeners for when the keyboard appears and disappears
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:)name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -99,6 +107,16 @@ NSDate *selectedDate;
 //this method simply updates our local value for whatever
 -(void)dateChanged {
     selectedDate = datePicker.date;
+}
+
+-(void)keyboardWillShow:(NSNotification *)notification {
+    //show our 'close' button, so the user can hide the keyboard when done editing
+    closeKeyboard.hidden = false;
+}
+
+-(void)keyboardWillHide:(NSNotification *)notification {
+    //hide our 'close' button again
+    closeKeyboard.hidden = true;
 }
 
 @end

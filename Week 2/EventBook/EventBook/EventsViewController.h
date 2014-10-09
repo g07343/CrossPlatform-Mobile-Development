@@ -11,6 +11,7 @@
 @interface EventsViewController : UIViewController <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     IBOutlet UITableView *tableView;
+    IBOutlet UILabel *tableLabel;
 }
 
 -(IBAction)onClick:(id)sender;

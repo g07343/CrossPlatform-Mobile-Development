@@ -35,6 +35,7 @@ bool rememberMe = false;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    
     //immediately check if there is previously saved 'remember me' value in user defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -88,6 +89,11 @@ bool rememberMe = false;
                         //log in successful, send to 'view' activity
                         UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                         UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                        //clear out our password field so it doesn't retain the user's password
+                        password.text = @"";
+                        
+                        //ensure our error text is invisible, in case the user logs out from the 'view' activity
+                        errorText.hidden = true;
                         [self presentViewController:eventView animated:YES completion:nil];
                         
                     } else {
@@ -119,6 +125,14 @@ bool rememberMe = false;
                     if (!error) {
                         //new user created, send to the 'view' activity
                         NSLog(@"user created!");
+                        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                        //clear out our password field so it doesn't retain the user's password
+                        password.text = @"";
+                        
+                        //ensure our error text is invisible, in case the user logs out from the 'view' activity
+                        errorText.hidden = true;
+                        [self presentViewController:eventView animated:YES completion:nil];
                     } else {
                         //error signing up so alert user
                         [self showError:@"signUp"];

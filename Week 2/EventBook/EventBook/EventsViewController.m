@@ -18,10 +18,14 @@
 
 NSMutableArray *eventArray;
 NSMutableArray *eventIds;
+int selectedEvent;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    // set up a long press gesture listener for use with our table view
+    UILongPressGestureRecognizer *longRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressed:)];
+    [tableView addGestureRecognizer:longRecognizer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -30,12 +34,11 @@ NSMutableArray *eventIds;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    NSLog(@"viewWillAppear runs!");
+    //ensure we're updating the table view whenever the view appears
     [self updateTableView];
 }
 
 -(void)updateTableView {
-    NSLog(@"updateTableView runs!");
     //grab whatever events are stored on Parse for this account
     PFQuery *query = [PFQuery queryWithClassName:@"Event"];
     
@@ -103,6 +106,7 @@ NSMutableArray *eventIds;
         //user tapped the 'logout' button
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logout?" message:@"Are you sure you want to return to the login screen?  You will be logged out." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+        alert.tag = 0;
         [alert show];
     } else if (button.tag == 1) {
         //user tapped the 'add' button
@@ -113,10 +117,59 @@ NSMutableArray *eventIds;
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [PFUser logOut];
-        [self dismissViewControllerAnimated:true completion:nil];
+    if (alertView.tag == 0) {
+        //logout alert view
+        if (buttonIndex == 1) {
+            [PFUser logOut];
+            [self dismissViewControllerAnimated:true completion:nil];
+        
+        }
+    } else if (alertView.tag == 1) {
+        //delete event alert view
+        if (buttonIndex == 1) {
+            [self deleteEvent:selectedEvent];
+        }
+    }
+    
+}
+
+//this method fires when the user long presses on the table view
+-(void)longPressed:(UILongPressGestureRecognizer *)gestureRecognizer {
+    //grab the point that is being long pressed
+    CGPoint point = [gestureRecognizer locationInView:tableView];
+    
+    //grab the index that the point is over
+    NSIndexPath *index = [tableView indexPathForRowAtPoint:point];
+    
+    if (index == nil) {
+        NSLog(@"long pressed on table view but not a row");
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        NSLog(@"long pressing tableView row:  %d", index.row);
+        
+        //set to global var so we can delete if the user wishes
+        selectedEvent = index.row;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete Event" message:@"Are you sure you want to delete this event?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+        alert.tag = 1;
+        [alert show];
     }
 }
 
+
+//this method takes care of deleting a specific event from the tableview
+-(void)deleteEvent:(int)index {
+    PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+    
+    [query getObjectInBackgroundWithId:eventIds[selectedEvent] block:^(PFObject *object, NSError *error) {
+        if (!object) {
+            NSLog(@"Error retrieving object from Parse!");
+        } else {
+            //object retrieved from parse successfully, so delete it and refresh table view
+            [object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded && error == nil) {
+                    [self updateTableView];
+                }
+            }];
+        }
+    }];
+}
 @end

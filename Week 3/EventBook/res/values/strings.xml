@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">EventBook</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="email_helperText">Email Address</string>
+    <string name="password_helperText">Password</string>
+    <string name="login_buttonText">Login</string>
+    <string name="login_checkHelper">Keep me logged in?</string>
+    <string name="login_newUserText">Create New</string>
+    <string name="login_altText">No account?</string>
+    <string name="login_errorText">Account already exists!  Please try logging in.</string>
+    <string name="menu_new">New Event</string>
+    <string name="menu_logout">Logout</string>
+    <string name="add_titleHelper">Event Name</string>
+    <string name="add_saveButton">Add</string>
+    <string name="add_eventText">Name your event</string>
+    <string name="add_eventDate">What day?</string>
+    <string name="add_eventTime">What time?</string>
+    <string name="view_helperText">Looks like you don\'t have any events saved.  Tap the \'+\' icon above</string>
+
+</resources>

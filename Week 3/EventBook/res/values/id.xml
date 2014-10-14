@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="emailField" />
+    <item type="id" name="passwordField" />
+    <item type="id" name="loginCheckbox" />
+    <item type="id" name="loginButton" />
+    <item type="id" name="newUserButton" />
+    <item type="id" name="errorText" />
+    <item type="id" name="menu_add" />
+    <item type="id" name="menu_logout" />
+    <item type="id" name="add_title" />
+    <item type="id" name="add_date" />
+    <item type="id" name="add_time" />
+    <item type="id" name="add_saveBtn" />
+    <item type="id" name="view_tableView" />
+    <item type="id" name="view_helperText" />
+</resources>

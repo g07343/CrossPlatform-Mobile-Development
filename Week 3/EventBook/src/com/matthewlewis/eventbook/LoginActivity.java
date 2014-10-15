@@ -2,10 +2,13 @@ package com.matthewlewis.eventbook;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -140,39 +143,72 @@ Checkable saveCredentials;
 						newUser.setUsername(userEmail);
 						newUser.setPassword(password);
 						
-						//attempt to sign up the user now
-						newUser.signUpInBackground(new SignUpCallback() {
+						//need to ensure we have network connectivity to properly sign up a new user
+						NetworkManager nm = new NetworkManager();
+						Boolean isConnected = nm.connectionStatus(_context);
+						
+						if (isConnected) {
+							//attempt to sign up the user now
+							newUser.signUpInBackground(new SignUpCallback() {
 
-							@Override
-							public void done(ParseException e) {
-								// check to see if we were successful
-								if (e == null) {
-									//now that we have created the new user, send them to the "viewer" activity
-									System.out.println("User:  " + userEmail + "  was created successfully!!!");
-									
-									//make sure to clear out the fields if the checkbox is left unchecked
-									if (!(saveCredentials.isChecked())) {
-										nameField.setText("");
-										passwordField.setText("");
-									}
-									
-									//since we have successfully created an account, hide the error text in case it's showing
-									errorText.setVisibility(View.GONE);
-									
-									//show toast to user to let them know their account was created
-									Toast.makeText(getApplicationContext(), "Account created",
-											   Toast.LENGTH_SHORT).show();
-									
-									//send user to 'viewer' activity
-									Intent viewIntent = new Intent(_context, ViewActivity.class);
-									System.out.println("Login Successful!");
-									startActivity(viewIntent);
-								} else {
-									//there was an error trying to create a new user, so figure out what it is and alert user
-									showError("signUp");
-								} 								
-							}					
-						});
+								@Override
+								public void done(ParseException e) {
+									// check to see if we were successful
+									if (e == null) {
+										//now that we have created the new user, send them to the "viewer" activity
+										System.out.println("User:  " + userEmail + "  was created successfully!!!");
+										
+										//make sure to clear out the fields if the checkbox is left unchecked
+										if (!(saveCredentials.isChecked())) {
+											nameField.setText("");
+											passwordField.setText("");
+										}
+										
+										//since we have successfully created an account, hide the error text in case it's showing
+										errorText.setVisibility(View.GONE);
+										
+										//show toast to user to let them know their account was created
+										Toast.makeText(getApplicationContext(), "Account created",
+												   Toast.LENGTH_SHORT).show();
+										
+										//send user to 'viewer' activity
+										Intent viewIntent = new Intent(_context, ViewActivity.class);
+										System.out.println("Login Successful!");
+										startActivity(viewIntent);
+									} else {
+										//there was an error trying to create a new user, so figure out what it is and alert user
+										showError("signUp");
+									} 								
+								}					
+							});	
+						} else {
+							//no network was detected, so let the user know
+							AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
+							alertBuilder.setMessage("Cannot create a new account because you aren't connected to the internet.  Go to Network Settings?");
+							alertBuilder.setCancelable(true);
+							alertBuilder.setPositiveButton("Network Manager", new DialogInterface.OnClickListener() {
+								//set up listener for our positive button 
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// attempt to send the user to network settings via intent
+									Intent networkIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);									
+									startActivity(networkIntent);
+								}
+							});
+							//set up listener for our 'no' button
+							alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// cancel the dialog
+									dialog.cancel();				
+								}
+							});
+							
+							//build alert and show it!
+							AlertDialog logoutAlert = alertBuilder.create();
+							logoutAlert.show();
+						}											
 					} else {
 						//no password
 						showError("password");

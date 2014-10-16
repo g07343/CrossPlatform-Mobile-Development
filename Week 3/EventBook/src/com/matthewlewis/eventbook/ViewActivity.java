@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -34,6 +35,11 @@ public class ViewActivity extends Activity{
 	TextView helperText;
 	List<String> ids;
 	List<String> events;
+	List<String> names;
+	List<Integer> months;
+	List<Integer> days;
+	List<Integer> hours;
+	List<Integer> minutes;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +141,12 @@ public class ViewActivity extends Activity{
 		//events = new String[objects.size()];
 		events = new ArrayList<String>();
 		ids = new ArrayList<String>();
+		names = new ArrayList<String>();
+		months = new ArrayList<Integer>();
+		days = new ArrayList<Integer>();
+		hours = new ArrayList<Integer>();
+		minutes = new ArrayList<Integer>();
+		
 		//loop through however many items we have and add to the listview
 		for (int i = 0; i < objects.size(); i ++) {
 			ParseObject currentEvent = objects.get(i);
@@ -156,6 +168,13 @@ public class ViewActivity extends Activity{
 			}
 			events.add(i, fullEvent);
 			
+			//add all bits of individual data to their respective arraylists
+			names.add(i, eventName);
+			months.add(i, eventMonth);
+			days.add(i, eventDay);
+			hours.add(i, eventHour);
+			minutes.add(i, eventMinute);
+			
 			//make sure to add the ids to our array so we can delete items if necessary
 			ids.add(i, currentEvent.getObjectId());
 		}
@@ -164,9 +183,36 @@ public class ViewActivity extends Activity{
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, events);
 		listView.setAdapter(adapter);
 		
+		//add item click listener, so we can allow the user to edit items
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// grab all of the data of the object that was selected and send to "add" activity, which will also work for editing
+				String eventName = names.get(arg2);
+				int month = months.get(arg2);
+				int day = days.get(arg2);
+				int hour = hours.get(arg2);
+				int minute = minutes.get(arg2);
+				String eventId = ids.get(arg2);
+				
+				Intent editIntent = new Intent(_context, AddActivity.class);
+				
+				//add all data to the intent before passing
+				editIntent.putExtra("name", eventName);
+				editIntent.putExtra("month", month);
+				editIntent.putExtra("day", day);
+				editIntent.putExtra("hour", hour);
+				editIntent.putExtra("minute", minute);
+				editIntent.putExtra("id", eventId);
+				startActivityForResult(editIntent, 1);
+			}
+			
+		});
+		
 		//add longPressListener for listview items so we can allow them to be deleted
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 					final int selectedItem, long arg3) {

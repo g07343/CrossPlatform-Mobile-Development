@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,8 @@ public class ViewActivity extends Activity{
 	List<Integer> hours;
 	List<Integer> minutes;
 	Timer updateTimer;
+	Handler handler;
+	
 	
 	ArrayAdapter<String> adapter = null;
 	
@@ -79,50 +82,55 @@ public class ViewActivity extends Activity{
 		SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
 		prefs.edit().putString("editKey", result).apply();
 		
-		//set up a timer to poll Parse for updated data
-		updateTimer = new Timer();
-		updateTimer.schedule(new TimerTask() {
-
-			@Override
-			public void run() {
-				// ensure we have an internet connection before making the remote data call
-				
-				
-				//first, check remote boolean signaling if anything was updated
-				
-				ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
-				query.findInBackground( new FindCallback<ParseObject>() {
-
-					@Override
-					public void done(List<ParseObject> objects, ParseException e) {
-						//check if there is a boolean object stored for this account, if so, pull new data
-						if (objects.isEmpty()) {
-							System.out.println("Data was not updated for this account");
-						} else {
-							ParseObject updateObject = objects.get(0);
-							String updateId = updateObject.getString("editKey");
-							SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-					        if (prefs.contains("editKey")) {
-					        	String savedKey = prefs.getString("editKey", null);
-					        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
-					        	if (!(savedKey.equals(updateId))) {
-					        		Toast.makeText(getApplicationContext(), "Deleting key...",
-					        				   Toast.LENGTH_LONG).show();
-					        		updateObject.deleteInBackground();
-					        		timerRelay();
-					        	}
-					        }
-							//timerRelay();
-						}
-					}					
-				});
-			}
-			
-		}, 0, 15000);
+		handler = new Handler();
+		handler.postDelayed(checkRunnable, 100);
+		
 	}
+	
+	private Runnable checkRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			// ensure we have an internet connection before making the remote data call
+			
+			
+			//first, check remote boolean signaling if anything was updated
+			
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
+			query.findInBackground( new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					//check if there is a boolean object stored for this account, if so, pull new data
+					if (objects.isEmpty()) {
+						System.out.println("Data was not updated for this account");
+					} else {
+						ParseObject updateObject = objects.get(0);
+						String updateId = updateObject.getString("editKey");
+						SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+				        if (prefs.contains("editKey")) {
+				        	String savedKey = prefs.getString("editKey", null);
+				        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
+				        	if (!(savedKey.equals(updateId))) {
+				        		Toast.makeText(getApplicationContext(), "Deleting key...",
+				        				   Toast.LENGTH_LONG).show();
+				        		updateObject.deleteInBackground();
+				        		timerRelay();
+				        	}
+				        }
+						//timerRelay();
+					}
+				}					
+			});
+			handler.postDelayed(this, 15000);
+		}
+		
+	};
 	
 	public void timerRelay() {
 		System.out.println("updating data since timer found remote boolean value");
+//		handler = new Handler();
+//		handler.post(updateRunnable);
 		this.runOnUiThread(updateRunnable);
 	}
 	
@@ -180,7 +188,7 @@ public class ViewActivity extends Activity{
         if (id == R.id.menu_add) {
         	System.out.println("Add tapped!");
         	Intent addIntent = new Intent(_context, AddActivity.class);
-        	updateTimer.cancel();
+        	handler.removeCallbacks(checkRunnable);
         	startActivityForResult(addIntent, 1);
             return true;
         } else if (id == R.id.menu_logout) {
@@ -210,7 +218,7 @@ public class ViewActivity extends Activity{
 				// ensure we set shared prefs value to keep the user from automatically being returned here
 				SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
 				prefs.edit().putBoolean("keepLogin", false).apply();
-				updateTimer.cancel();
+				handler.removeCallbacks(checkRunnable);
 				finish();
 			}
 		});
@@ -238,47 +246,52 @@ public class ViewActivity extends Activity{
     	//manually update data as well 
 		getData();
     	
+		if (handler == null) {
+			handler = new Handler();
+		} 
+		
+		handler.postDelayed(checkRunnable, 100);
     	//restart our timer
-    	//set up a timer to poll Parse for updated data
-    			updateTimer = new Timer();
-    			updateTimer.schedule(new TimerTask() {
-
-    				@Override
-    				public void run() {
-    					// ensure we have an internet connection before making the remote data call
-    					
-    					
-    					//first, check remote boolean signaling if anything was updated
-    					
-    					ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
-    					query.findInBackground( new FindCallback<ParseObject>() {
-
-    						@Override
-    						public void done(List<ParseObject> objects, ParseException e) {
-    							//check if there is a boolean object stored for this account, if so, pull new data
-    							if (objects.isEmpty()) {
-    								System.out.println("Data was not updated for this account");
-    							} else {
-    								ParseObject updateObject = objects.get(0);
-    								String updateId = updateObject.getString("editKey");
-    								SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-    						        if (prefs.contains("editKey")) {
-    						        	String savedKey = prefs.getString("editKey", null);
-    						        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
-    						        	if (!(savedKey.equals(updateId))) {
-    						        		Toast.makeText(getApplicationContext(), "Deleting object",
-    						        				   Toast.LENGTH_LONG).show();
-    						        		updateObject.deleteInBackground();
-    						        		timerRelay();
-    						        	}
-    						        }    														
-    								timerRelay();
-    							}
-    						}					
-    					});
-    				}
-    				
-    			}, 0, 15000);
+//    	//set up a timer to poll Parse for updated data
+//    			updateTimer = new Timer();
+//    			updateTimer.schedule(new TimerTask() {
+//
+//    				@Override
+//    				public void run() {
+//    					// ensure we have an internet connection before making the remote data call
+//    					
+//    					
+//    					//first, check remote boolean signaling if anything was updated
+//    					
+//    					ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
+//    					query.findInBackground( new FindCallback<ParseObject>() {
+//
+//    						@Override
+//    						public void done(List<ParseObject> objects, ParseException e) {
+//    							//check if there is a boolean object stored for this account, if so, pull new data
+//    							if (objects.isEmpty()) {
+//    								System.out.println("Data was not updated for this account");
+//    							} else {
+//    								ParseObject updateObject = objects.get(0);
+//    								String updateId = updateObject.getString("editKey");
+//    								SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+//    						        if (prefs.contains("editKey")) {
+//    						        	String savedKey = prefs.getString("editKey", null);
+//    						        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
+//    						        	if (!(savedKey.equals(updateId))) {
+//    						        		Toast.makeText(getApplicationContext(), "Deleting object",
+//    						        				   Toast.LENGTH_LONG).show();
+//    						        		updateObject.deleteInBackground();
+//    						        		timerRelay();
+//    						        	}
+//    						        }    														
+//    								timerRelay();
+//    							}
+//    						}					
+//    					});
+//    				}
+//    				
+//    			}, 0, 15000);
     	
 	}
 	
@@ -355,7 +368,7 @@ public class ViewActivity extends Activity{
 				editIntent.putExtra("minute", minute);
 				editIntent.putExtra("id", eventId);
 				
-				updateTimer.cancel();
+				handler.removeCallbacks(checkRunnable);
 	        	
 				startActivityForResult(editIntent, 1);
 			}

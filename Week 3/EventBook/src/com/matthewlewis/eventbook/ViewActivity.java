@@ -2,6 +2,7 @@ package com.matthewlewis.eventbook;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,6 +33,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ViewActivity extends Activity{
 
@@ -46,7 +48,7 @@ public class ViewActivity extends Activity{
 	List<Integer> hours;
 	List<Integer> minutes;
 	Timer updateTimer;
-	int deleteCounter;
+	
 	ArrayAdapter<String> adapter = null;
 	
 	
@@ -71,8 +73,11 @@ public class ViewActivity extends Activity{
 		//grab the remote data for this user
 		getData();
 		
-		//set our initial deleteCounter, which allows all running devices to stay in sync without
-		//a 'race' condition since, our remote boolean get deleted eventually
+		//set a 'default' id for the shared preferences, so we can ensure there is a value
+		Random randomNum = new Random();
+		String result = String.valueOf(randomNum.nextInt());		
+		SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+		prefs.edit().putString("editKey", result).apply();
 		
 		//set up a timer to poll Parse for updated data
 		updateTimer = new Timer();
@@ -92,23 +97,28 @@ public class ViewActivity extends Activity{
 					public void done(List<ParseObject> objects, ParseException e) {
 						//check if there is a boolean object stored for this account, if so, pull new data
 						if (objects.isEmpty()) {
-							//System.out.println("Data was not updated for this account");
+							System.out.println("Data was not updated for this account");
 						} else {
-							deleteCounter ++;
-							ParseObject booleanObject = objects.get(0);
-							if (deleteCounter > 2) {
-								deleteCounter = 0;
-								//since the delete counter has at least been around for 
-								//30 seconds, its safe to assume all currently running devices have updated so delete remote boolean
-								booleanObject.deleteInBackground();
-							}							
-							timerRelay();
+							ParseObject updateObject = objects.get(0);
+							String updateId = updateObject.getString("editKey");
+							SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+					        if (prefs.contains("editKey")) {
+					        	String savedKey = prefs.getString("editKey", null);
+					        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
+					        	if (!(savedKey.equals(updateId))) {
+					        		Toast.makeText(getApplicationContext(), "Deleting key...",
+					        				   Toast.LENGTH_LONG).show();
+					        		updateObject.deleteInBackground();
+					        		timerRelay();
+					        	}
+					        }
+							//timerRelay();
 						}
 					}					
 				});
 			}
 			
-		}, 0, 10000);
+		}, 0, 15000);
 	}
 	
 	public void timerRelay() {
@@ -171,7 +181,6 @@ public class ViewActivity extends Activity{
         	System.out.println("Add tapped!");
         	Intent addIntent = new Intent(_context, AddActivity.class);
         	updateTimer.cancel();
-        	deleteCounter = 0;
         	startActivityForResult(addIntent, 1);
             return true;
         } else if (id == R.id.menu_logout) {
@@ -202,7 +211,6 @@ public class ViewActivity extends Activity{
 				SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
 				prefs.edit().putBoolean("keepLogin", false).apply();
 				updateTimer.cancel();
-	        	deleteCounter = 0;
 				finish();
 			}
 		});
@@ -226,10 +234,9 @@ public class ViewActivity extends Activity{
     	//this function runs whenever the user finishes the "Add" activity, so we make sure 
     	//to keep our listview updated
     	System.out.println("activity result runs");
-		//getData();
     	
-    	//reset our counter 
-    	deleteCounter = 0;
+    	//manually update data as well 
+		getData();
     	
     	//restart our timer
     	//set up a timer to poll Parse for updated data
@@ -250,23 +257,28 @@ public class ViewActivity extends Activity{
     						public void done(List<ParseObject> objects, ParseException e) {
     							//check if there is a boolean object stored for this account, if so, pull new data
     							if (objects.isEmpty()) {
-    								//System.out.println("Data was not updated for this account");
+    								System.out.println("Data was not updated for this account");
     							} else {
-    								deleteCounter ++;
-    								ParseObject booleanObject = objects.get(0);
-    								if (deleteCounter > 2) {
-    									deleteCounter = 0;
-    									//since the delete counter has at least been around for 
-    									//30 seconds, its safe to assume all currently running devices have updated so delete remote boolean
-    									booleanObject.deleteInBackground();
-    								}							
+    								ParseObject updateObject = objects.get(0);
+    								String updateId = updateObject.getString("editKey");
+    								SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+    						        if (prefs.contains("editKey")) {
+    						        	String savedKey = prefs.getString("editKey", null);
+    						        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
+    						        	if (!(savedKey.equals(updateId))) {
+    						        		Toast.makeText(getApplicationContext(), "Deleting object",
+    						        				   Toast.LENGTH_LONG).show();
+    						        		updateObject.deleteInBackground();
+    						        		timerRelay();
+    						        	}
+    						        }    														
     								timerRelay();
     							}
     						}					
     					});
     				}
     				
-    			}, 0, 10000);
+    			}, 0, 15000);
     	
 	}
 	
@@ -344,7 +356,7 @@ public class ViewActivity extends Activity{
 				editIntent.putExtra("id", eventId);
 				
 				updateTimer.cancel();
-	        	deleteCounter = 0;
+	        	
 				startActivityForResult(editIntent, 1);
 			}
 			
@@ -392,10 +404,17 @@ public class ViewActivity extends Activity{
 													//reset the remote boolean object in case other devices 
 													//are currently running the app
 													ParseObject updateObject = new ParseObject("wasUpdated");
-													updateObject.add("updated", true);
+													Random randomNum = new Random();
+													String result = String.valueOf(randomNum.nextInt());
+													
+													SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+													prefs.edit().putString("editKey", result).apply();
+													
+													
+													updateObject.put("editKey", result);
 													updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
 													updateObject.saveInBackground();
-													deleteCounter = 0;
+													
 													// now that the item has been deleted, update our list again
 													getData();													
 												}

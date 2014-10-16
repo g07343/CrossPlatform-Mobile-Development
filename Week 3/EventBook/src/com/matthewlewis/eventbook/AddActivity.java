@@ -1,6 +1,7 @@
 package com.matthewlewis.eventbook;
 
 import java.util.Calendar;
+import java.util.Random;
 
 import com.parse.GetCallback;
 import com.parse.ParseACL;
@@ -14,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -153,10 +155,27 @@ public class AddActivity extends Activity{
 											public void done(ParseException e) {
 												//create the 'update' object and save that now, which will alert our timer in the previous activity
 												ParseObject updateObject = new ParseObject("wasUpdated");
-												updateObject.add("updated", true);
+												Random randomNum = new Random();
+												String result = String.valueOf(randomNum.nextInt());
+												
+												SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+												prefs.edit().putString("editKey", result).apply();
+												
+												
+												updateObject.put("editKey", result);
+												
 												updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
-												updateObject.saveInBackground();
-												finish();
+												updateObject.saveInBackground(new SaveCallback() {
+													
+
+													@Override
+													public void done(
+															ParseException e) {
+														finish();
+														
+													}
+												});
+												
 											}										
 										}); 
 										
@@ -285,10 +304,25 @@ public class AddActivity extends Activity{
 								@Override
 								public void done(ParseException e) {
 									ParseObject updateObject = new ParseObject("wasUpdated");
-									updateObject.add("updated", true);
+									Random randomNum = new Random();
+									String result = String.valueOf(randomNum.nextInt());
+									
+									SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+									prefs.edit().putString("editKey", result).apply();
+									
+									updateObject.put("editKey", result);
+									
 									updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
-									updateObject.saveInBackground();
-									finish();
+									updateObject.saveInBackground(new SaveCallback() {
+
+										@Override
+										public void done(ParseException e) {
+											finish();
+											
+										}
+										
+									});
+									
 								}
 								
 							});					

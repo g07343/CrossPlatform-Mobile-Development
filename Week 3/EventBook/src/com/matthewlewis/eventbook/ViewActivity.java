@@ -3,18 +3,13 @@ package com.matthewlewis.eventbook;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,8 +17,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,15 +29,16 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ViewActivity extends Activity{
 
 	Context _context;
 	ListView listView;
 	TextView helperText;
+	LinearLayout refreshLayout;
 	List<String> ids;
 	List<String> events;
 	List<String> names;
@@ -48,9 +46,8 @@ public class ViewActivity extends Activity{
 	List<Integer> days;
 	List<Integer> hours;
 	List<Integer> minutes;
-	Timer updateTimer;
 	Handler handler;
-	
+	boolean dialogShown;
 	
 	ArrayAdapter<String> adapter = null;
 	
@@ -69,9 +66,13 @@ public class ViewActivity extends Activity{
 		//grab instances of our interface elements
 		listView = (ListView) findViewById(R.id.view_tableView);
 		helperText = (TextView) findViewById(R.id.view_helperText);
+		refreshLayout = (LinearLayout) findViewById(R.id.refresh_layout);
 		
 		//by default, set the helper text to be invisible
 		helperText.setVisibility(View.GONE);
+		
+		//set our 'container' layout to be invisible (this holds the refresh ui)
+		refreshLayout.setVisibility(View.GONE);
 		
 		//grab the remote data for this user
 		getData();
@@ -82,9 +83,17 @@ public class ViewActivity extends Activity{
 		SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
 		prefs.edit().putString("editKey", result).apply();
 		
-		handler = new Handler();
-		handler.postDelayed(checkRunnable, 100);
+		//set up default value for our no user dialog
+		dialogShown = false;
 		
+		NetworkManager nm = new NetworkManager();
+		boolean isConnected = nm.connectionStatus(_context);
+		if (isConnected) {
+			handler = new Handler();
+			handler.postDelayed(checkRunnable, 100);
+		} else {
+			
+		}		
 	}
 	
 	private Runnable checkRunnable = new Runnable() {
@@ -92,37 +101,90 @@ public class ViewActivity extends Activity{
 		@Override
 		public void run() {
 			// ensure we have an internet connection before making the remote data call
+			NetworkManager nm = new NetworkManager();
+			boolean isConnected = nm.connectionStatus(_context);
+			if (isConnected) {
+				ParseUser currentUser = ParseUser.getCurrentUser();
+				if (currentUser != null) {
+					//check if we're running in 'offline' mode without a user at this point
+					helperText.setVisibility(View.GONE);
+					helperText.setTextColor(Color.BLACK);
+					//first, check remote boolean signaling if anything was updated
+					refreshLayout.setVisibility(View.VISIBLE);
+					System.out.println("VISIBLE @ checkRunnable start");
+					ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
+					query.findInBackground( new FindCallback<ParseObject>() {
+						
+						@Override
+						public void done(List<ParseObject> objects, ParseException e) {
+							//check if there is a boolean object stored for this account, if so, pull new data
+							if (objects.isEmpty()) {
+								refreshLayout.setVisibility(View.GONE);
+								System.out.println("INVISIBLE @ checkRunnable done_noNew");
+								handler.postDelayed(checkRunnable, 15000);
+							} else {
+								ParseObject updateObject = objects.get(0);
+								String updateId = updateObject.getString("editKey");
+								SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+						        if (prefs.contains("editKey")) {
+						        	String savedKey = prefs.getString("editKey", null);
+						        	//System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
+						        	if (!(savedKey.equals(updateId))) {
+						        		System.out.println("Saved key did not equal block");
+						        		updateObject.deleteInBackground();
+						        		timerRelay();
+						        	} else {
+						        		refreshLayout.setVisibility(View.GONE);
+						        		handler.postDelayed(checkRunnable, 15000);
+						        		if (events.size() == 0) {
+						        			helperText.setVisibility(View.VISIBLE);
+						        		}
+						        	}
+						        } else {
+						        	handler.postDelayed(checkRunnable, 15000);
+						        }
+							}							
+						}					
+					});
+				} else {
+					if (dialogShown == false) {
+						//currently running in 'offline' mode without a logged in user, so prompt
+						AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
+						alertBuilder.setMessage("Network connection restored.  Do you want to log in?  This dialog will not show again.");
+						alertBuilder.setCancelable(true);
+						alertBuilder.setPositiveButton("Return to login", new DialogInterface.OnClickListener() {
+							//set up listener for our positive button 
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// send user back to login screen
+								finish();
+							}
+						});
+						//set up listener for our 'no' button
+						alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//set our boolean to true so we aren't harrassing the user every 15 seconds
+								dialogShown = true;
+								// cancel the dialog
+								dialog.cancel();				
+							}
+						});
+						
+						//build alert and show it!
+						AlertDialog loginAlert = alertBuilder.create();
+						loginAlert.show();
+					}					
+				}				
+			} else {
+				helperText.setText("Running in offline mode");
+				helperText.setTextColor(Color.RED);
+				helperText.setVisibility(View.VISIBLE);
+				handler.postDelayed(checkRunnable, 15000);
+			}
 			
 			
-			//first, check remote boolean signaling if anything was updated
-			
-			ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
-			query.findInBackground( new FindCallback<ParseObject>() {
-
-				@Override
-				public void done(List<ParseObject> objects, ParseException e) {
-					//check if there is a boolean object stored for this account, if so, pull new data
-					if (objects.isEmpty()) {
-						System.out.println("Data was not updated for this account");
-					} else {
-						ParseObject updateObject = objects.get(0);
-						String updateId = updateObject.getString("editKey");
-						SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-				        if (prefs.contains("editKey")) {
-				        	String savedKey = prefs.getString("editKey", null);
-				        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
-				        	if (!(savedKey.equals(updateId))) {
-				        		Toast.makeText(getApplicationContext(), "Deleting key...",
-				        				   Toast.LENGTH_LONG).show();
-				        		updateObject.deleteInBackground();
-				        		timerRelay();
-				        	}
-				        }
-						//timerRelay();
-					}
-				}					
-			});
-			handler.postDelayed(this, 15000);
 		}
 		
 	};
@@ -133,6 +195,7 @@ public class ViewActivity extends Activity{
 //		handler.post(updateRunnable);
 		this.runOnUiThread(updateRunnable);
 	}
+	
 	
 	private Runnable updateRunnable = new Runnable() {
 
@@ -157,6 +220,7 @@ public class ViewActivity extends Activity{
 						} else {
 							// no previously created events, so let the user know
 							// that there is nothing to show
+							helperText.setText(R.string.view_helperText);
 							helperText.setVisibility(View.VISIBLE);
 							if (adapter != null) {
 								events.clear();
@@ -168,6 +232,9 @@ public class ViewActivity extends Activity{
 					}
 				}
 			});
+			refreshLayout.setVisibility(View.GONE);
+			System.out.println("INVISIBLE @ updateRunnable finish");
+			handler.postDelayed(checkRunnable, 15000);
 		}
 		
 	};
@@ -189,6 +256,7 @@ public class ViewActivity extends Activity{
         	System.out.println("Add tapped!");
         	Intent addIntent = new Intent(_context, AddActivity.class);
         	handler.removeCallbacks(checkRunnable);
+        	
         	startActivityForResult(addIntent, 1);
             return true;
         } else if (id == R.id.menu_logout) {
@@ -209,7 +277,7 @@ public class ViewActivity extends Activity{
 		//this method builds an alert dialog to inform the user they are returning to the login activity and will be logged out.
 		//it's used for both the logout icon in the action bar, and if the user taps the 'back' soft key
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-		alertBuilder.setMessage("Log out and return to login screen?");
+		alertBuilder.setMessage("Return to the login screen?  If applicable, you will be logged out.");
 		alertBuilder.setCancelable(true);
 		alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			//set up listener for our positive button 
@@ -248,51 +316,10 @@ public class ViewActivity extends Activity{
     	
 		if (handler == null) {
 			handler = new Handler();
+			System.out.println("Handler was null");
 		} 
 		
-		handler.postDelayed(checkRunnable, 100);
-    	//restart our timer
-//    	//set up a timer to poll Parse for updated data
-//    			updateTimer = new Timer();
-//    			updateTimer.schedule(new TimerTask() {
-//
-//    				@Override
-//    				public void run() {
-//    					// ensure we have an internet connection before making the remote data call
-//    					
-//    					
-//    					//first, check remote boolean signaling if anything was updated
-//    					
-//    					ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
-//    					query.findInBackground( new FindCallback<ParseObject>() {
-//
-//    						@Override
-//    						public void done(List<ParseObject> objects, ParseException e) {
-//    							//check if there is a boolean object stored for this account, if so, pull new data
-//    							if (objects.isEmpty()) {
-//    								System.out.println("Data was not updated for this account");
-//    							} else {
-//    								ParseObject updateObject = objects.get(0);
-//    								String updateId = updateObject.getString("editKey");
-//    								SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-//    						        if (prefs.contains("editKey")) {
-//    						        	String savedKey = prefs.getString("editKey", null);
-//    						        	System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
-//    						        	if (!(savedKey.equals(updateId))) {
-//    						        		Toast.makeText(getApplicationContext(), "Deleting object",
-//    						        				   Toast.LENGTH_LONG).show();
-//    						        		updateObject.deleteInBackground();
-//    						        		timerRelay();
-//    						        	}
-//    						        }    														
-//    								timerRelay();
-//    							}
-//    						}					
-//    					});
-//    				}
-//    				
-//    			}, 0, 15000);
-    	
+		handler.postDelayed(checkRunnable, 100);    	
 	}
 	
 	//this method updates our event listview
@@ -369,7 +396,7 @@ public class ViewActivity extends Activity{
 				editIntent.putExtra("id", eventId);
 				
 				handler.removeCallbacks(checkRunnable);
-	        	
+				
 				startActivityForResult(editIntent, 1);
 			}
 			
@@ -388,57 +415,90 @@ public class ViewActivity extends Activity{
 					//set up listener for our positive button 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// remove the item from the remote server according to its id
-						//grab all events that the current user has previously created (if any)
-						ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
-						eventQuery.findInBackground(new FindCallback<ParseObject>() {
+						//ensure we have connectivity before allowing deletion
+						NetworkManager nm = new NetworkManager();
+						boolean isConnected = nm.connectionStatus(_context);
+						if (isConnected) {
+							// remove the item from the remote server according to its id
+							//grab all events that the current user has previously created (if any)
+							ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
+							eventQuery.findInBackground(new FindCallback<ParseObject>() {
+								
+							//string of the particular object id to be deleted
 							
-						//string of the particular object id to be deleted
-						
-						String idToDelete = ids.get(selectedItem);
-							@Override
-							public void done(List<ParseObject> objects, ParseException e) {
-								// TODO Auto-generated method stub
-								if (e == null) {
-									//find the specific item we want to delete
-									for (int i = 0; i < objects.size(); i ++) {
-										ParseObject currentObject = objects.get(i);
-										String localId = currentObject.getObjectId();
-										if (localId.equals(idToDelete)) {
-											currentObject.deleteEventually(new DeleteCallback() {
+							String idToDelete = ids.get(selectedItem);
+								@Override
+								public void done(List<ParseObject> objects, ParseException e) {
+									// TODO Auto-generated method stub
+									if (e == null) {
+										//find the specific item we want to delete
+										for (int i = 0; i < objects.size(); i ++) {
+											ParseObject currentObject = objects.get(i);
+											String localId = currentObject.getObjectId();
+											if (localId.equals(idToDelete)) {
+												currentObject.deleteEventually(new DeleteCallback() {
 
-												@Override
-												public void done(ParseException e) {
-													//update our listview
-													ids.remove(selectedItem);
-													events.remove(selectedItem);
-													adapter.notifyDataSetChanged();
-													
-													//reset the remote boolean object in case other devices 
-													//are currently running the app
-													ParseObject updateObject = new ParseObject("wasUpdated");
-													Random randomNum = new Random();
-													String result = String.valueOf(randomNum.nextInt());
-													
-													SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-													prefs.edit().putString("editKey", result).apply();
-													
-													
-													updateObject.put("editKey", result);
-													updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
-													updateObject.saveInBackground();
-													
-													// now that the item has been deleted, update our list again
-													getData();													
-												}
-											});
-										}
-									}								
-								} else {
-									Log.d("EVENTQUERY", e.getMessage());
+													@Override
+													public void done(ParseException e) {
+														//update our listview
+														ids.remove(selectedItem);
+														events.remove(selectedItem);
+														adapter.notifyDataSetChanged();
+														
+														//reset the remote boolean object in case other devices 
+														//are currently running the app
+														ParseObject updateObject = new ParseObject("wasUpdated");
+														Random randomNum = new Random();
+														String result = String.valueOf(randomNum.nextInt());
+														
+														SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+														prefs.edit().putString("editKey", result).apply();
+														
+														
+														updateObject.put("editKey", result);
+														updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+														updateObject.saveInBackground();
+														
+														// now that the item has been deleted, update our list again
+														getData();													
+													}
+												});
+											}
+										}								
+									} else {
+										Log.d("EVENTQUERY", e.getMessage());
+									}
+								}							
+							});
+						} else {
+							// no network, alert user
+							AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
+							alertBuilder.setMessage("Cannot delete your event because you aren't connected to the internet.  Go to Network Settings?");
+							alertBuilder.setCancelable(true);
+							alertBuilder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+								//set up listener for our positive button 
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// attempt to send the user to network settings via intent
+									Intent networkIntent = new Intent(Settings.ACTION_SETTINGS);									
+									startActivity(networkIntent);
 								}
-							}							
-						});
+							});
+							//set up listener for our 'no' button
+							alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// cancel the dialog
+									dialog.cancel();				
+								}
+							});
+							
+							//build alert and show it!
+							AlertDialog networkAlert = alertBuilder.create();
+							networkAlert.show();
+						}
+						
 					}
 				});
 				//set up listener for our 'no' button
@@ -457,34 +517,73 @@ public class ViewActivity extends Activity{
 				return true;
 			}		
 		});
+		refreshLayout.setVisibility(View.GONE);
+		System.out.println("INVISIBLE @ updateList end");
 	}
 	
 	public void getData() {
-		// grab all events that the current user has previously created (if any)
-		ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
-		System.out.println("GET_DATA RUNS!");
-		eventQuery.findInBackground(new FindCallback<ParseObject>() {
-			
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				// TODO Auto-generated method stub
-				if (e == null) {
-					System.out.println("Number of found events:  " + objects.size());
-					// check number of returned items
-					if (objects.size() > 0) {
-						// there is at least one previously created event, so
-						// display it to the user
-						helperText.setVisibility(View.GONE);
-						updateList(objects);
+		NetworkManager nm = new NetworkManager();
+		boolean isConnected = nm.connectionStatus(_context);
+		if (isConnected) {
+			helperText.setTextColor(Color.BLACK);
+			refreshLayout.setVisibility(View.VISIBLE);
+			System.out.println("VISIBLE @ getData start");
+			// grab all events that the current user has previously created (if any)
+			ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
+			System.out.println("GET_DATA RUNS!");
+			eventQuery.findInBackground(new FindCallback<ParseObject>() {
+				
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					// TODO Auto-generated method stub
+					if (e == null) {
+						System.out.println("Number of found events:  " + objects.size());
+						// check number of returned items
+						if (objects.size() > 0) {
+							// there is at least one previously created event, so
+							// display it to the user
+							helperText.setVisibility(View.GONE);
+							updateList(objects);
+						} else {
+							// no previously created events, so let the user know
+							// that there is nothing to show
+							helperText.setText(R.string.view_helperText);
+							helperText.setVisibility(View.VISIBLE);
+							refreshLayout.setVisibility(View.GONE);
+							System.out.println("INVISIBLE @ getData noEvents");
+						}
 					} else {
-						// no previously created events, so let the user know
-						// that there is nothing to show
-						helperText.setVisibility(View.VISIBLE);
+						Log.d("EVENTQUERY", e.getMessage());
 					}
-				} else {
-					Log.d("EVENTQUERY", e.getMessage());
 				}
-			}
-		});
-	}	
+			});
+		} else {
+			helperText.setText("Running in offline mode");
+			helperText.setTextColor(Color.RED);
+			helperText.setVisibility(View.VISIBLE);
+		}
+		
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		handler.removeCallbacks(checkRunnable);
+		handler = null;
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		if (handler == null) {
+			handler = new Handler();
+			handler.postDelayed(checkRunnable, 100);
+		} 
+		
+		getData();
+	}
+	
+	
 }

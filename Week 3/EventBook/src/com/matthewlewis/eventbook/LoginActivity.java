@@ -85,42 +85,86 @@ Checkable saveCredentials;
 				
 				//make sure to record whether the user wants to stay logged in
 				setLoginPrefs();
-				
-				//check to ensure there is at least something in the above fields
-				if (userEmail != null && userEmail.length() > 0) {
-					if (password != null && password.length() > 0) {
-						ParseUser.logInInBackground(userEmail, password, new LogInCallback() {
+				NetworkManager nm = new NetworkManager();
+				boolean isConnected = nm.connectionStatus(_context);
+				if (isConnected) {
+					//check to ensure there is at least something in the above fields
+					if (userEmail != null && userEmail.length() > 0) {
+						if (password != null && password.length() > 0) {
+							ParseUser.logInInBackground(userEmail, password, new LogInCallback() {
 
-							@Override
-							public void done(ParseUser user, ParseException e) {
-								// check to see if the user was successfully logged in or not
-								if (user != null) {
-									//make sure to clear out the fields if the checkbox is left unchecked
-									if (!(saveCredentials.isChecked())) {
-										nameField.setText("");
-										passwordField.setText("");
-									}
-									
-									//since we have successfully logged into an account, hide the error text in case it's showing
-									errorText.setVisibility(View.GONE);
-									
-									//we logged in, so send user to the 'view' activity
-									Intent viewIntent = new Intent(_context, ViewActivity.class);
-									System.out.println("Login Successful!");
-									startActivity(viewIntent);
-								} else {
-									showError("loginFailed");
-								}								
-							}							
-						});
+								@Override
+								public void done(ParseUser user, ParseException e) {
+									// check to see if the user was successfully logged in or not
+									if (user != null) {
+										//make sure to clear out the fields if the checkbox is left unchecked
+										if (!(saveCredentials.isChecked())) {
+											nameField.setText("");
+											passwordField.setText("");
+										}
+										
+										//since we have successfully logged into an account, hide the error text in case it's showing
+										errorText.setVisibility(View.GONE);
+										
+										//we logged in, so send user to the 'view' activity
+										Intent viewIntent = new Intent(_context, ViewActivity.class);
+										System.out.println("Login Successful!");
+										startActivity(viewIntent);
+									} else {
+										showError("loginFailed");
+										e.printStackTrace();
+									}								
+								}							
+							});
+						} else {
+							//user did not enter a password
+							showError("password");
+						}				
 					} else {
-						//user did not enter a password
-						showError("password");
-					}				
+						//user forgot to input an email address
+						showError("username");
+					}
 				} else {
-					//user forgot to input an email address
-					showError("username");
-				}				
+					//no network, give user the option to enter app in 'offline' mode
+					//no network was detected, so let the user know
+					AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
+					alertBuilder.setMessage("Cannot login because you aren't connected to the internet.  Enter the app in offline mode?  NOTE:  Any data entered will not be saved!");
+					alertBuilder.setCancelable(true);
+					alertBuilder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+						//set up listener for our positive button 
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// attempt to send the user to network settings via intent
+							Intent networkIntent = new Intent(Settings.ACTION_SETTINGS);									
+							startActivity(networkIntent);
+						}
+					});
+					//set up listener for our 'no' button
+					alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// cancel the dialog
+							dialog.cancel();				
+						}
+					});
+					
+					//build alert and show it!
+					AlertDialog logoutAlert = alertBuilder.create();
+					logoutAlert.setButton(AlertDialog.BUTTON_NEUTRAL, "Go offline", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							//let the user enter the app in offline mode without logging in
+							Intent offlineIntent = new Intent(_context, ViewActivity.class);
+							startActivity(offlineIntent);
+						}
+						
+					});
+					
+					logoutAlert.show();
+				}
+								
 			}        	
         });
         

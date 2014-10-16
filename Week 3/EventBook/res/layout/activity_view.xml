@@ -15,7 +15,27 @@
     <ListView
         android:id="@id/view_tableView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="451dp" >
     </ListView>
 
+	<LinearLayout
+	    android:id="@id/refresh_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+
+	    <ProgressBar
+	        android:id="@+id/progressBar1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" />
+
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:gravity="left|center_vertical"
+	        android:text="@string/refresh_helperText"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
+	    
+	</LinearLayout>
 </LinearLayout>

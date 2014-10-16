@@ -60,6 +60,9 @@ public class AddActivity extends Activity{
 		
 		timePicker.setIs24HourView(false);
 		
+		//set date picker to only allow future dates
+		datePicker.setMinDate(System.currentTimeMillis() - 1000);
+		
 		//check to see if we received data from the view class, meaning the user wants to edit
 		Bundle receivedData = this.getIntent().getExtras();
 		if (receivedData != null && receivedData.containsKey("name")) {
@@ -171,11 +174,9 @@ public class AddActivity extends Activity{
 													@Override
 													public void done(
 															ParseException e) {
-														finish();
-														
+														finish();														
 													}
-												});
-												
+												});											
 											}										
 										}); 
 										
@@ -237,14 +238,14 @@ public class AddActivity extends Activity{
 					} else {
 						// no network, alert user
 						AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
-						alertBuilder.setMessage("Cannot edit you event because you aren't connected to the internet.  Go to Network Settings?");
+						alertBuilder.setMessage("Cannot edit your event because you aren't connected to the internet.  Go to Network Settings?");
 						alertBuilder.setCancelable(true);
-						alertBuilder.setPositiveButton("Network Manager", new DialogInterface.OnClickListener() {
+						alertBuilder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 							//set up listener for our positive button 
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								// attempt to send the user to network settings via intent
-								Intent networkIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);									
+								Intent networkIntent = new Intent(Settings.ACTION_SETTINGS);									
 								startActivity(networkIntent);
 							}
 						});
@@ -351,12 +352,12 @@ public class AddActivity extends Activity{
 						AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
 						alertBuilder.setMessage("Cannot save a new event because you aren't currently connected to the internet.  Go to Network Settings?");
 						alertBuilder.setCancelable(true);
-						alertBuilder.setPositiveButton("Network Manager", new DialogInterface.OnClickListener() {
+						alertBuilder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 							//set up listener for our positive button 
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								// attempt to send the user to network settings via intent
-								Intent networkIntent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);									
+								Intent networkIntent = new Intent(Settings.ACTION_SETTINGS);									
 								startActivity(networkIntent);
 							}
 						});

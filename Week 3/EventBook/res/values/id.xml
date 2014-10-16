@@ -14,4 +14,5 @@
     <item type="id" name="add_saveBtn" />
     <item type="id" name="view_tableView" />
     <item type="id" name="view_helperText" />
+    <item type="id" name="refresh_layout" />
 </resources>

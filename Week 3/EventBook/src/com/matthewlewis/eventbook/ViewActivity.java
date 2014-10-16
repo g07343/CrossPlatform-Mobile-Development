@@ -2,12 +2,17 @@ package com.matthewlewis.eventbook;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -40,6 +45,10 @@ public class ViewActivity extends Activity{
 	List<Integer> days;
 	List<Integer> hours;
 	List<Integer> minutes;
+	Timer updateTimer;
+	int deleteCounter;
+	ArrayAdapter<String> adapter = null;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,89 @@ public class ViewActivity extends Activity{
 		
 		//grab the remote data for this user
 		getData();
+		
+		//set our initial deleteCounter, which allows all running devices to stay in sync without
+		//a 'race' condition since, our remote boolean get deleted eventually
+		
+		//set up a timer to poll Parse for updated data
+		updateTimer = new Timer();
+		updateTimer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				// ensure we have an internet connection before making the remote data call
+				
+				
+				//first, check remote boolean signaling if anything was updated
+				
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
+				query.findInBackground( new FindCallback<ParseObject>() {
+
+					@Override
+					public void done(List<ParseObject> objects, ParseException e) {
+						//check if there is a boolean object stored for this account, if so, pull new data
+						if (objects.isEmpty()) {
+							//System.out.println("Data was not updated for this account");
+						} else {
+							deleteCounter ++;
+							ParseObject booleanObject = objects.get(0);
+							if (deleteCounter > 2) {
+								deleteCounter = 0;
+								//since the delete counter has at least been around for 
+								//30 seconds, its safe to assume all currently running devices have updated so delete remote boolean
+								booleanObject.deleteInBackground();
+							}							
+							timerRelay();
+						}
+					}					
+				});
+			}
+			
+		}, 0, 10000);
 	}
+	
+	public void timerRelay() {
+		System.out.println("updating data since timer found remote boolean value");
+		this.runOnUiThread(updateRunnable);
+	}
+	
+	private Runnable updateRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			// update our UI here
+			// grab all events that the current user has previously created (if any)
+			ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
+			eventQuery.findInBackground(new FindCallback<ParseObject>() {
+
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					// TODO Auto-generated method stub
+					if (e == null) {
+						System.out.println("Number of found events:  " + objects.size());
+						// check number of returned items
+						if (objects.size() > 0) {
+							// there is at least one previously created event, so
+							// display it to the user
+							helperText.setVisibility(View.GONE);
+							updateList(objects);
+						} else {
+							// no previously created events, so let the user know
+							// that there is nothing to show
+							helperText.setVisibility(View.VISIBLE);
+							if (adapter != null) {
+								events.clear();
+								adapter.notifyDataSetChanged();
+							}
+						}
+					} else {
+						Log.d("EVENTQUERY", e.getMessage());
+					}
+				}
+			});
+		}
+		
+	};
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,6 +170,8 @@ public class ViewActivity extends Activity{
         if (id == R.id.menu_add) {
         	System.out.println("Add tapped!");
         	Intent addIntent = new Intent(_context, AddActivity.class);
+        	updateTimer.cancel();
+        	deleteCounter = 0;
         	startActivityForResult(addIntent, 1);
             return true;
         } else if (id == R.id.menu_logout) {
@@ -108,6 +201,8 @@ public class ViewActivity extends Activity{
 				// ensure we set shared prefs value to keep the user from automatically being returned here
 				SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
 				prefs.edit().putBoolean("keepLogin", false).apply();
+				updateTimer.cancel();
+	        	deleteCounter = 0;
 				finish();
 			}
 		});
@@ -131,7 +226,48 @@ public class ViewActivity extends Activity{
     	//this function runs whenever the user finishes the "Add" activity, so we make sure 
     	//to keep our listview updated
     	System.out.println("activity result runs");
-		getData();
+		//getData();
+    	
+    	//reset our counter 
+    	deleteCounter = 0;
+    	
+    	//restart our timer
+    	//set up a timer to poll Parse for updated data
+    			updateTimer = new Timer();
+    			updateTimer.schedule(new TimerTask() {
+
+    				@Override
+    				public void run() {
+    					// ensure we have an internet connection before making the remote data call
+    					
+    					
+    					//first, check remote boolean signaling if anything was updated
+    					
+    					ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
+    					query.findInBackground( new FindCallback<ParseObject>() {
+
+    						@Override
+    						public void done(List<ParseObject> objects, ParseException e) {
+    							//check if there is a boolean object stored for this account, if so, pull new data
+    							if (objects.isEmpty()) {
+    								//System.out.println("Data was not updated for this account");
+    							} else {
+    								deleteCounter ++;
+    								ParseObject booleanObject = objects.get(0);
+    								if (deleteCounter > 2) {
+    									deleteCounter = 0;
+    									//since the delete counter has at least been around for 
+    									//30 seconds, its safe to assume all currently running devices have updated so delete remote boolean
+    									booleanObject.deleteInBackground();
+    								}							
+    								timerRelay();
+    							}
+    						}					
+    					});
+    				}
+    				
+    			}, 0, 10000);
+    	
 	}
 	
 	//this method updates our event listview
@@ -180,7 +316,7 @@ public class ViewActivity extends Activity{
 		}
 		
 		//now that we have the formatted events, add to an adapter and update our listview
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, events);
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, events);
 		listView.setAdapter(adapter);
 		
 		//add item click listener, so we can allow the user to edit items
@@ -206,6 +342,9 @@ public class ViewActivity extends Activity{
 				editIntent.putExtra("hour", hour);
 				editIntent.putExtra("minute", minute);
 				editIntent.putExtra("id", eventId);
+				
+				updateTimer.cancel();
+	        	deleteCounter = 0;
 				startActivityForResult(editIntent, 1);
 			}
 			
@@ -249,6 +388,14 @@ public class ViewActivity extends Activity{
 													ids.remove(selectedItem);
 													events.remove(selectedItem);
 													adapter.notifyDataSetChanged();
+													
+													//reset the remote boolean object in case other devices 
+													//are currently running the app
+													ParseObject updateObject = new ParseObject("wasUpdated");
+													updateObject.add("updated", true);
+													updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+													updateObject.saveInBackground();
+													deleteCounter = 0;
 													// now that the item has been deleted, update our list again
 													getData();													
 												}
@@ -275,7 +422,7 @@ public class ViewActivity extends Activity{
 				//build alert and show it!
 				AlertDialog logoutAlert = alertBuilder.create();
 				logoutAlert.show();
-				return false;
+				return true;
 			}		
 		});
 	}
@@ -283,8 +430,9 @@ public class ViewActivity extends Activity{
 	public void getData() {
 		// grab all events that the current user has previously created (if any)
 		ParseQuery<ParseObject> eventQuery = ParseQuery.getQuery("Event");
+		System.out.println("GET_DATA RUNS!");
 		eventQuery.findInBackground(new FindCallback<ParseObject>() {
-
+			
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				// TODO Auto-generated method stub

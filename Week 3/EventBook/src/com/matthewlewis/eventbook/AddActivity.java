@@ -151,7 +151,11 @@ public class AddActivity extends Activity{
 
 											@Override
 											public void done(ParseException e) {
-												//return to the 'view' activity
+												//create the 'update' object and save that now, which will alert our timer in the previous activity
+												ParseObject updateObject = new ParseObject("wasUpdated");
+												updateObject.add("updated", true);
+												updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+												updateObject.saveInBackground();
 												finish();
 											}										
 										}); 
@@ -280,7 +284,10 @@ public class AddActivity extends Activity{
 
 								@Override
 								public void done(ParseException e) {
-									//return to the 'view' activity
+									ParseObject updateObject = new ParseObject("wasUpdated");
+									updateObject.add("updated", true);
+									updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+									updateObject.saveInBackground();
 									finish();
 								}
 								

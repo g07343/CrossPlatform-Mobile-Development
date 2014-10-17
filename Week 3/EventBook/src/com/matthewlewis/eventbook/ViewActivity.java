@@ -48,6 +48,7 @@ public class ViewActivity extends Activity{
 	List<Integer> minutes;
 	Handler handler;
 	boolean dialogShown;
+	int updateCounter;
 	
 	ArrayAdapter<String> adapter = null;
 	
@@ -73,6 +74,9 @@ public class ViewActivity extends Activity{
 		
 		//set our 'container' layout to be invisible (this holds the refresh ui)
 		refreshLayout.setVisibility(View.GONE);
+		
+		//set initial value for our update counter, which basically serves as a delay before an upate token is deleted\
+		updateCounter = 0; 
 		
 		//grab the remote data for this user
 		getData();
@@ -132,9 +136,19 @@ public class ViewActivity extends Activity{
 						        	//System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
 						        	if (!(savedKey.equals(updateId))) {
 						        		//if the keys don't match, something was updated by another device
-						        		updateObject.deleteInBackground();
+						        		
+						        		//increment counter -- this allows enough time for all other devices to get updated
+						        		updateCounter ++;
+						        		System.out.println("COUNTER INCREMENTED!");
+						        		if (updateCounter >= 2) {
+						        			updateObject.deleteInBackground();
+						        			System.out.println("TOKEN DELETED!!!");
+						        			//reset to default value for future updates
+						        			updateCounter = 0;
+						        		}						        		
 						        		timerRelay();
 						        	} else {
+						        		//the 'token' found was created by this device, so nothing to update
 						        		refreshLayout.setVisibility(View.GONE);
 						        		handler.postDelayed(checkRunnable, 15000);
 						        		if (events != null && events.size() == 0) {

@@ -101,91 +101,120 @@ public class AddActivity extends Activity{
 					NetworkManager nm = new NetworkManager();
 					boolean isConnected = nm.connectionStatus(_context);
 					if (isConnected) {
-						// network is good, so figure out what if anything was
-						// changed by user
-						
-						//grab the original object from parse
-						ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
-						
-						query.getInBackground(originalId, new GetCallback<ParseObject>() {
+						ParseUser currentUser = ParseUser.getCurrentUser();
+						if (currentUser != null) {
+							// network is good, so figure out what if anything was
+							// changed by user
+							
+							//grab the original object from parse
+							ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+							
+							query.getInBackground(originalId, new GetCallback<ParseObject>() {
 
-							@Override
-							public void done(ParseObject eventObject,
-									ParseException e) {
-								//create a simple counter to ensure at least one thing was changed
-								int changeCounter = 0;
-								
-								// name
-								if (name != null && name.length() > 0) {
-									if (!(name.equals(originalName))) {
-										// user edited the name so add the new one
-										eventObject.put("name", name);
-										changeCounter ++;
-									}
+								@Override
+								public void done(ParseObject eventObject,
+										ParseException e) {
+									//create a simple counter to ensure at least one thing was changed
+									int changeCounter = 0;
+									
+									// name
+									if (name != null && name.length() > 0) {
+										if (!(name.equals(originalName))) {
+											// user edited the name so add the new one
+											eventObject.put("name", name);
+											changeCounter ++;
+										}
 
-									// month
-									if (month != originalMonth) {
-										eventObject.put("month", month);
-										changeCounter ++;
-									}
+										// month
+										if (month != originalMonth) {
+											eventObject.put("month", month);
+											changeCounter ++;
+										}
 
-									// day
-									if (day != originalDay) {
-										eventObject.put("day", day);
-										changeCounter ++;
-									}
+										// day
+										if (day != originalDay) {
+											eventObject.put("day", day);
+											changeCounter ++;
+										}
 
-									// hour
-									if (hour != originalHour) {
-										eventObject.put("hour", hour);
-										changeCounter ++;
-									}
+										// hour
+										if (hour != originalHour) {
+											eventObject.put("hour", hour);
+											changeCounter ++;
+										}
 
-									// minute
-									if (minute != originalMinute) {
-										eventObject.put("minute", minute);
-										changeCounter ++;
-									}
+										// minute
+										if (minute != originalMinute) {
+											eventObject.put("minute", minute);
+											changeCounter ++;
+										}
 
-									//check to make sure the user changed at least one thing
-									//so we aren't needlessly using the network sending an 'empty' object
-									if (changeCounter > 0) {
-										System.out.println("Changes were made!");
-										
-										eventObject.saveInBackground(new SaveCallback() {
+										//check to make sure the user changed at least one thing
+										//so we aren't needlessly using the network sending an 'empty' object
+										if (changeCounter > 0) {
+											System.out.println("Changes were made!");
+											
+											eventObject.saveInBackground(new SaveCallback() {
 
-											@Override
-											public void done(ParseException e) {
-												//create the 'update' object and save that now, which will alert our timer in the previous activity
-												ParseObject updateObject = new ParseObject("wasUpdated");
-												Random randomNum = new Random();
-												String result = String.valueOf(randomNum.nextInt());
-												
-												SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-												prefs.edit().putString("editKey", result).apply();
-												
-												
-												updateObject.put("editKey", result);
-												
-												updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
-												updateObject.saveInBackground(new SaveCallback() {
+												@Override
+												public void done(ParseException e) {
+													//create the 'update' object and save that now, which will alert our timer in the previous activity
+													ParseObject updateObject = new ParseObject("wasUpdated");
+													Random randomNum = new Random();
+													String result = String.valueOf(randomNum.nextInt());
 													
+													SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+													prefs.edit().putString("editKey", result).apply();
+													
+													
+													updateObject.put("editKey", result);
+													
+													updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+													updateObject.saveInBackground(new SaveCallback() {
+														
 
-													@Override
-													public void done(
-															ParseException e) {
-														finish();														
-													}
-												});											
-											}										
-										}); 
-										
+														@Override
+														public void done(
+																ParseException e) {
+															finish();														
+														}
+													});											
+												}										
+											}); 
+											
+										} else {
+											//no changes were made, alert user
+											AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
+													_context);
+											alertBuilder
+													.setMessage("No changes to " + "\'" + name + "\'" +" were made.  No need to save.");
+											alertBuilder.setCancelable(true);
+
+											// set up listener for our 'okay' button
+											alertBuilder.setNegativeButton("Okay",
+													new DialogInterface.OnClickListener() {
+
+														@Override
+														public void onClick(
+																DialogInterface dialog,
+																int which) {
+															// cancel the dialog
+															dialog.cancel();
+														}
+													});
+
+											// build alert and show it!
+											AlertDialog noNameAlert = alertBuilder.create();
+											noNameAlert.show();
+										}						
 									} else {
-										//no changes were made, alert user
+										// alert user to input a valid name
+										// no name was entered, so prompt the user to pick a
+										// name
 										AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
 												_context);
 										alertBuilder
-												.setMessage("No changes to " + "\'" + name + "\'" +" were made.  No need to save.");
+												.setMessage("Please input a valid name");
 										alertBuilder.setCancelable(true);
 
 										// set up listener for our 'okay' button
@@ -204,36 +233,35 @@ public class AddActivity extends Activity{
 										// build alert and show it!
 										AlertDialog noNameAlert = alertBuilder.create();
 										noNameAlert.show();
-									}						
-								} else {
-									// alert user to input a valid name
-									// no name was entered, so prompt the user to pick a
-									// name
-									AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
-											_context);
-									alertBuilder
-											.setMessage("Please input a valid name");
-									alertBuilder.setCancelable(true);
+									}								
+								}													
+							});
+						} else {
+							//no logged in user, prompt login
+							AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
+									_context);
+							alertBuilder
+									.setMessage("Cannot edit event because you are not logged in.  Please log in to continue.");
+							alertBuilder.setCancelable(true);
 
-									// set up listener for our 'okay' button
-									alertBuilder.setNegativeButton("Okay",
-											new DialogInterface.OnClickListener() {
+							// set up listener for our 'okay' button
+							alertBuilder.setNegativeButton("Okay",
+									new DialogInterface.OnClickListener() {
 
-												@Override
-												public void onClick(
-														DialogInterface dialog,
-														int which) {
-													// cancel the dialog
-													dialog.cancel();
-												}
-											});
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// cancel the dialog
+											dialog.cancel();
+										}
+									});
 
-									// build alert and show it!
-									AlertDialog noNameAlert = alertBuilder.create();
-									noNameAlert.show();
-								}								
-							}													
-						});
+							// build alert and show it!
+							AlertDialog noNameAlert = alertBuilder.create();
+							noNameAlert.show();
+						}
+						
 
 					} else {
 						// no network, alert user
@@ -287,66 +315,94 @@ public class AddActivity extends Activity{
 					NetworkManager nm = new NetworkManager();
 					boolean isConnected = nm.connectionStatus(_context);
 					if (isConnected) {
-						// ensure the user input a name
-						if (name != null && name.length() > 0) {
-							//we know the user input something, so go ahead and save out the above values
-							ParseObject eventObject = new ParseObject("Event");
-							eventObject.put("name", name);
-							eventObject.put("month", month);
-							eventObject.put("day", day);
-							eventObject.put("hour", hour);
-							eventObject.put("minute", minute);
-							
-							//set the ACL property so this is only accessible to the currently logged in user
-							eventObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
-							//save to Parse
-							eventObject.saveInBackground(new SaveCallback() {
+						ParseUser currentUser = ParseUser.getCurrentUser();
+						if (currentUser != null) {
+							// ensure the user input a name
+							if (name != null && name.length() > 0) {
+								//we know the user input something, so go ahead and save out the above values
+								ParseObject eventObject = new ParseObject("Event");
+								eventObject.put("name", name);
+								eventObject.put("month", month);
+								eventObject.put("day", day);
+								eventObject.put("hour", hour);
+								eventObject.put("minute", minute);
+								
+								//set the ACL property so this is only accessible to the currently logged in user
+								eventObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+								//save to Parse
+								eventObject.saveInBackground(new SaveCallback() {
 
-								@Override
-								public void done(ParseException e) {
-									ParseObject updateObject = new ParseObject("wasUpdated");
-									Random randomNum = new Random();
-									String result = String.valueOf(randomNum.nextInt());
+									@Override
+									public void done(ParseException e) {
+										ParseObject updateObject = new ParseObject("wasUpdated");
+										Random randomNum = new Random();
+										String result = String.valueOf(randomNum.nextInt());
+										
+										SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
+										prefs.edit().putString("editKey", result).apply();
+										
+										updateObject.put("editKey", result);
+										
+										updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
+										updateObject.saveInBackground(new SaveCallback() {
+
+											@Override
+											public void done(ParseException e) {
+												finish();
+												
+											}
+											
+										});
+										
+									}
 									
-									SharedPreferences prefs = _context.getSharedPreferences("com.matthewlewis.eventbook", Context.MODE_PRIVATE);
-									prefs.edit().putString("editKey", result).apply();
+								});					
+							} else {
+								//no name was entered, so prompt the user to pick a name
+								AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
+								alertBuilder.setMessage("Please input a valid name");
+								alertBuilder.setCancelable(true);
+				
+								//set up listener for our 'okay' button
+								alertBuilder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
 									
-									updateObject.put("editKey", result);
-									
-									updateObject.setACL(new ParseACL(ParseUser.getCurrentUser()));
-									updateObject.saveInBackground(new SaveCallback() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// cancel the dialog
+										dialog.cancel();				
+									}
+								});
+								
+								//build alert and show it!
+								AlertDialog noNameAlert = alertBuilder.create();
+								noNameAlert.show();
+							}
+						} else {
+							//no logged in user, prompt login
+							AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
+									_context);
+							alertBuilder
+									.setMessage("Cannot create an event because you are not currently logged in.  Please log in to create new events.");
+							alertBuilder.setCancelable(true);
+
+							// set up listener for our 'okay' button
+							alertBuilder.setNegativeButton("Okay",
+									new DialogInterface.OnClickListener() {
 
 										@Override
-										public void done(ParseException e) {
-											finish();
-											
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// cancel the dialog
+											dialog.cancel();
 										}
-										
 									});
-									
-								}
-								
-							});					
-						} else {
-							//no name was entered, so prompt the user to pick a name
-							AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);
-							alertBuilder.setMessage("Please input a valid name");
-							alertBuilder.setCancelable(true);
-			
-							//set up listener for our 'okay' button
-							alertBuilder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// cancel the dialog
-									dialog.cancel();				
-								}
-							});
-							
-							//build alert and show it!
+
+							// build alert and show it!
 							AlertDialog noNameAlert = alertBuilder.create();
 							noNameAlert.show();
-						}					
+						}
+											
 					} else {
 						//no network connection, so alert user
 						AlertDialog.Builder alertBuilder = new AlertDialog.Builder(_context);

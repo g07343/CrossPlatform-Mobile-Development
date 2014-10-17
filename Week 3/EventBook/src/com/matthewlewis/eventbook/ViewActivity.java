@@ -109,9 +109,8 @@ public class ViewActivity extends Activity{
 					//check if we're running in 'offline' mode without a user at this point
 					helperText.setVisibility(View.GONE);
 					helperText.setTextColor(Color.BLACK);
-					//first, check remote boolean signaling if anything was updated
+					//first, check remote object signaling if anything was updated
 					refreshLayout.setVisibility(View.VISIBLE);
-					System.out.println("VISIBLE @ checkRunnable start");
 					ParseQuery<ParseObject> query = ParseQuery.getQuery("wasUpdated");
 					query.findInBackground( new FindCallback<ParseObject>() {
 						
@@ -120,7 +119,9 @@ public class ViewActivity extends Activity{
 							//check if there is a boolean object stored for this account, if so, pull new data
 							if (objects.isEmpty()) {
 								refreshLayout.setVisibility(View.GONE);
-								System.out.println("INVISIBLE @ checkRunnable done_noNew");
+								if (events != null && events.size() == 0) {
+				        			helperText.setVisibility(View.VISIBLE);
+				        		}
 								handler.postDelayed(checkRunnable, 15000);
 							} else {
 								ParseObject updateObject = objects.get(0);
@@ -130,13 +131,13 @@ public class ViewActivity extends Activity{
 						        	String savedKey = prefs.getString("editKey", null);
 						        	//System.out.println("Stored:  " +  savedKey + "  Found:  " + updateId);
 						        	if (!(savedKey.equals(updateId))) {
-						        		System.out.println("Saved key did not equal block");
+						        		//if the keys don't match, something was updated by another device
 						        		updateObject.deleteInBackground();
 						        		timerRelay();
 						        	} else {
 						        		refreshLayout.setVisibility(View.GONE);
 						        		handler.postDelayed(checkRunnable, 15000);
-						        		if (events.size() == 0) {
+						        		if (events != null && events.size() == 0) {
 						        			helperText.setVisibility(View.VISIBLE);
 						        		}
 						        	}
@@ -182,17 +183,11 @@ public class ViewActivity extends Activity{
 				helperText.setTextColor(Color.RED);
 				helperText.setVisibility(View.VISIBLE);
 				handler.postDelayed(checkRunnable, 15000);
-			}
-			
-			
-		}
-		
+			}			
+		}		
 	};
 	
 	public void timerRelay() {
-		System.out.println("updating data since timer found remote boolean value");
-//		handler = new Handler();
-//		handler.post(updateRunnable);
 		this.runOnUiThread(updateRunnable);
 	}
 	
@@ -233,7 +228,6 @@ public class ViewActivity extends Activity{
 				}
 			});
 			refreshLayout.setVisibility(View.GONE);
-			System.out.println("INVISIBLE @ updateRunnable finish");
 			handler.postDelayed(checkRunnable, 15000);
 		}
 		
@@ -310,9 +304,6 @@ public class ViewActivity extends Activity{
     	//this function runs whenever the user finishes the "Add" activity, so we make sure 
     	//to keep our listview updated
     	System.out.println("activity result runs");
-    	
-    	//manually update data as well 
-		getData();
     	
 		if (handler == null) {
 			handler = new Handler();
@@ -561,8 +552,7 @@ public class ViewActivity extends Activity{
 			helperText.setText("Running in offline mode");
 			helperText.setTextColor(Color.RED);
 			helperText.setVisibility(View.VISIBLE);
-		}
-		
+		}		
 	}
 
 	@Override
@@ -581,7 +571,9 @@ public class ViewActivity extends Activity{
 			handler = new Handler();
 			handler.postDelayed(checkRunnable, 100);
 		} 
-		
+		System.out.println("onResume runs!!!");
+		//refresh our data regardless of if the app is being brought to the forefront, 
+		//or if this activity is 'appearing' from the add screen
 		getData();
 	}
 	

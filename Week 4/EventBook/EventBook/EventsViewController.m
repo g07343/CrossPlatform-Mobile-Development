@@ -22,7 +22,10 @@ NSMutableArray *eventMonths;
 NSMutableArray *eventDays;
 NSMutableArray *eventHours;
 NSMutableArray *eventMinutes;
+NSMutableArray *eventNames;
+
 int selectedEvent;
+bool isEditing;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,6 +36,9 @@ int selectedEvent;
     
     //set numLines for tableLabel here, because doing it on the storyboard generates an annoying warning
     tableLabel.numberOfLines = 2;
+    
+    //set up initial value for our isEditing bool to false
+    isEditing = false;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,6 +70,7 @@ int selectedEvent;
             eventDays = [NSMutableArray arrayWithCapacity:objects.count];
             eventHours = [NSMutableArray arrayWithCapacity:objects.count];
             eventMinutes = [NSMutableArray arrayWithCapacity:objects.count];
+            eventNames = [NSMutableArray arrayWithCapacity:objects.count];
             
             if (objects.count > 0) {
                 // grab the data we need from each found event
@@ -82,9 +89,18 @@ int selectedEvent;
                     eventIds[i] = eventId;
                     
                     //need to convert ints to NSNumbers so we can store in an array unfortunately
-                    NSNumber *monthsConverted = [NSNumber numberWithInt:month];
+                    NSNumber *monthConverted = [NSNumber numberWithInt:month];
+                    NSNumber *dayConverted = [NSNumber numberWithInt:day];
+                    NSNumber *hourConverted = [NSNumber numberWithInt:hour];
+                    NSNumber *minuteConverted = [NSNumber numberWithInt:minute];
                     
-                    eventMonths[i] = monthsConverted;
+                    //add retrieved data to arrays
+                    eventNames [i]= eventTitle;
+                    eventMonths[i] = monthConverted;
+                    eventDays[i] = dayConverted;
+                    eventHours[i] = hourConverted;
+                    eventMinutes[i] = minuteConverted;
+                    
                     
                 }
             } else {
@@ -116,6 +132,30 @@ int selectedEvent;
     
     cell.textLabel.text = [eventArray objectAtIndex:indexPath.row];
     return cell;
+}
+
+//method to detect when the user selects an item in the TableView by tapping it
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //set our 'selectedEvent' int to item user selected and send to the 'add' activity, which will pull double duty as our editor as well
+    selectedEvent = indexPath.row;
+    
+    //set our bool to true so that the 'add' activity knows to populate its data
+    isEditing = true;
+    
+    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    AddViewController *addView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"AddViewController"];
+    
+    
+    //set the data within the new view controller
+    addView.eventTitle = eventNames[indexPath.row];
+    addView.eventId = eventIds[indexPath.row];
+    addView.eventMonth = eventMonths[indexPath.row];
+    addView.eventDay = eventDays[indexPath.row];
+    addView.eventHour = eventHours[indexPath.row];
+    addView.eventMinute = eventMinutes[indexPath.row];
+    
+    [self presentViewController:addView animated:YES completion:nil];
 }
 
 -(IBAction)onClick:(id)sender {

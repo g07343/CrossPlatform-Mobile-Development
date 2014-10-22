@@ -15,7 +15,10 @@
 
 @implementation AddViewController
 
+@synthesize eventTitle, eventId, eventMonth, eventDay, eventHour, eventMinute;
 NSDate *selectedDate;
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,6 +32,36 @@ NSDate *selectedDate;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:)name:UIKeyboardWillHideNotification object:nil];
+    
+    //check to see if we are supposed to be editing an already created event
+    if (eventTitle != nil) {
+        NSLog(@"Passed event name was:  %@", eventTitle);
+        
+        //jump through hoops since there is no simple way to create an NSDate object from NSNumbers...
+        NSDateComponents *comps = [[NSDateComponents alloc] init];
+        
+        //convert back to ints
+        int convertedDay = [eventDay integerValue];
+        int convertedMonth = [eventMonth integerValue];
+        int convertedHour = [eventHour integerValue];
+        int convertedMinute = [eventMinute integerValue];
+        
+        //set newly converted ints to our date components object
+        [comps setDay:convertedDay];
+        [comps setMonth:convertedMonth];
+        [comps setHour:convertedHour];
+        [comps setMinute:convertedMinute];
+        
+        //create an NSCalendar to use to convert date components to an actual date object
+        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        
+        //FINALLY...convert to an NSDate
+        NSDate *eventDate = [calendar dateFromComponents:comps];
+        
+        [eventNameField setText:eventTitle];
+        [datePicker setDate:eventDate];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,24 +97,83 @@ NSDate *selectedDate;
             int minute = [formattedMinute intValue];
             NSLog(@"");
             
-            //now that we have all of the data, save it out to the user's account on parse
-            PFObject *event = [PFObject objectWithClassName:@"Event"];
-            event[@"name"] = eventName;
-            event[@"month"] = @(month);
-            event[@"day"] = @(day);
-            event[@"hour"] = @(hour);
-            event[@"minute"] = @(minute);
+            //check whether we are editing or if we are currently creating a new event
+            if (eventTitle != nil) {
+                //grab the original object from parse so we can modify it
+                PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+                [query whereKey:@"objectId" equalTo:eventId];
+                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    if (!error) {
+                        PFObject *oldObject = objects[0];
+                        
+                        //create an int counter to track the number of items that were changed
+                        int itemsUpdated = 0;
+                        
+                        //only update the data that was changed
+                        if (eventTitle != eventName) {
+                            oldObject[@"name"] = eventName;
+                            itemsUpdated ++;
+                        }
+                        
+                        //convert original values back to ints for comparison
+                        int convertedDay = [eventDay integerValue];
+                        int convertedMonth = [eventMonth integerValue];
+                        int convertedHour = [eventHour integerValue];
+                        int convertedMinute = [eventMinute integerValue];
+                        
+                        if (convertedMonth != month) {
+                            oldObject[@"month"] = @(month);
+                            itemsUpdated ++;
+                        }
+                        
+                        if (convertedDay != day) {
+                            oldObject[@"day"] = @(day);
+                            itemsUpdated ++;
+                        }
+                        
+                        if (convertedHour != hour) {
+                            oldObject[@"hour"] = @(hour);
+                            itemsUpdated ++;
+                        }
+                        
+                        if (convertedMinute != minute) {
+                            oldObject[@"minute"] = @(minute);
+                            itemsUpdated ++;
+                        }
+                        
+                        //save out the newly created object only if at least one thing was changed
+                        if (itemsUpdated > 0) {
+                            [oldObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                if (succeeded) {
+                                    [self dismissViewControllerAnimated:true completion:nil];
+                                }
+                            }];
+                        }
+                    }
+                }];
+                
+            } else {
+                //now that we have all of the data, save it out to the user's account on parse
+                PFObject *event = [PFObject objectWithClassName:@"Event"];
+                event[@"name"] = eventName;
+                event[@"month"] = @(month);
+                event[@"day"] = @(day);
+                event[@"hour"] = @(hour);
+                event[@"minute"] = @(minute);
+                
+                //set the ACL restriction to the current user
+                event.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                
+                [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                    if (succeeded) {
+                        [self dismissViewControllerAnimated:true completion:nil];
+                    } else {
+                        
+                    }
+                }];
+            }
             
-            //set the ACL restriction to the current user
-            event.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
             
-            [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-                if (succeeded) {
-                    [self dismissViewControllerAnimated:true completion:nil];
-                } else {
-                    
-                }
-            }];
         } else {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Name Required" message:@"Please choose a name for your event" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
             [alert show];

@@ -17,4 +17,10 @@
 
 -(IBAction)onClick:(id)sender;
 
+@property (nonatomic, strong) NSString *eventTitle;
+@property (nonatomic, strong) NSString *eventId;
+@property (nonatomic, strong) NSNumber *eventMonth;
+@property (nonatomic, strong) NSNumber *eventDay;
+@property (nonatomic, strong) NSNumber *eventHour;
+@property (nonatomic, strong) NSNumber *eventMinute;
 @end

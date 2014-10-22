@@ -1,0 +1,525 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C931989D19E385E100E46E22 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C931989C19E385E100E46E22 /* main.m */; };
+		C93198A019E385E100E46E22 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C931989F19E385E100E46E22 /* AppDelegate.m */; };
+		C93198A319E385E100E46E22 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C93198A219E385E100E46E22 /* LoginViewController.m */; };
+		C93198A619E385E100E46E22 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C93198A419E385E100E46E22 /* Main.storyboard */; };
+		C93198A819E385E100E46E22 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C93198A719E385E100E46E22 /* Images.xcassets */; };
+		C93198AB19E385E100E46E22 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C93198A919E385E100E46E22 /* LaunchScreen.xib */; };
+		C93198B719E385E100E46E22 /* EventBookTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C93198B619E385E100E46E22 /* EventBookTests.m */; };
+		C94B242919E4D9B400005DEF /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242619E4D9B400005DEF /* Bolts.framework */; };
+		C94B242A19E4D9B400005DEF /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242719E4D9B400005DEF /* Parse.framework */; };
+		C94B242B19E4D9B400005DEF /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */; };
+		C94B242D19E4DA0300005DEF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242C19E4DA0300005DEF /* AudioToolbox.framework */; };
+		C94B242F19E4DA0800005DEF /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242E19E4DA0800005DEF /* CFNetwork.framework */; };
+		C94B243119E4DA1000005DEF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243019E4DA1000005DEF /* CoreGraphics.framework */; };
+		C94B243319E4DA1600005DEF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243219E4DA1600005DEF /* CoreLocation.framework */; };
+		C94B243519E4DA2C00005DEF /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243419E4DA2C00005DEF /* libz.dylib */; };
+		C94B243719E4DA3800005DEF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243619E4DA3800005DEF /* MobileCoreServices.framework */; };
+		C94B243919E4DA4A00005DEF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243819E4DA4A00005DEF /* QuartzCore.framework */; };
+		C94B243B19E4DA5300005DEF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243A19E4DA5300005DEF /* Security.framework */; };
+		C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243C19E4DA5B00005DEF /* StoreKit.framework */; };
+		C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */; };
+		C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94B244119E5D97D00005DEF /* EventsViewController.m */; };
+		C94B244519E5EA9C00005DEF /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94B244419E5EA9C00005DEF /* AddViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C93198B119E385E100E46E22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C931988F19E385E100E46E22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C931989619E385E100E46E22;
+			remoteInfo = EventBook;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C931989719E385E100E46E22 /* EventBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C931989B19E385E100E46E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C931989C19E385E100E46E22 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C931989E19E385E100E46E22 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C931989F19E385E100E46E22 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C93198A119E385E100E46E22 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		C93198A219E385E100E46E22 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		C93198A519E385E100E46E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C93198A719E385E100E46E22 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C93198AA19E385E100E46E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		C93198B019E385E100E46E22 /* EventBookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventBookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C93198B519E385E100E46E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C93198B619E385E100E46E22 /* EventBookTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBookTests.m; sourceTree = "<group>"; };
+		C94B242619E4D9B400005DEF /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = EventBook/Bolts.framework; sourceTree = "<group>"; };
+		C94B242719E4D9B400005DEF /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = EventBook/Parse.framework; sourceTree = "<group>"; };
+		C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = EventBook/ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		C94B242C19E4DA0300005DEF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		C94B242E19E4DA0800005DEF /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243019E4DA1000005DEF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243219E4DA1600005DEF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243419E4DA2C00005DEF /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
+		C94B243619E4DA3800005DEF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243819E4DA4A00005DEF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243A19E4DA5300005DEF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243C19E4DA5B00005DEF /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		C94B244019E5D97D00005DEF /* EventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsViewController.h; sourceTree = "<group>"; };
+		C94B244119E5D97D00005DEF /* EventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsViewController.m; sourceTree = "<group>"; };
+		C94B244319E5EA9C00005DEF /* AddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		C94B244419E5EA9C00005DEF /* AddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C931989419E385E100E46E22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */,
+				C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */,
+				C94B243B19E4DA5300005DEF /* Security.framework in Frameworks */,
+				C94B243919E4DA4A00005DEF /* QuartzCore.framework in Frameworks */,
+				C94B243719E4DA3800005DEF /* MobileCoreServices.framework in Frameworks */,
+				C94B243519E4DA2C00005DEF /* libz.dylib in Frameworks */,
+				C94B243319E4DA1600005DEF /* CoreLocation.framework in Frameworks */,
+				C94B243119E4DA1000005DEF /* CoreGraphics.framework in Frameworks */,
+				C94B242F19E4DA0800005DEF /* CFNetwork.framework in Frameworks */,
+				C94B242D19E4DA0300005DEF /* AudioToolbox.framework in Frameworks */,
+				C94B242A19E4D9B400005DEF /* Parse.framework in Frameworks */,
+				C94B242919E4D9B400005DEF /* Bolts.framework in Frameworks */,
+				C94B242B19E4D9B400005DEF /* ParseFacebookUtils.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C93198AD19E385E100E46E22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C931988E19E385E100E46E22 = {
+			isa = PBXGroup;
+			children = (
+				C94B242519E4D95000005DEF /* Frameworks */,
+				C931989919E385E100E46E22 /* EventBook */,
+				C93198B319E385E100E46E22 /* EventBookTests */,
+				C931989819E385E100E46E22 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C931989819E385E100E46E22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C931989719E385E100E46E22 /* EventBook.app */,
+				C93198B019E385E100E46E22 /* EventBookTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C931989919E385E100E46E22 /* EventBook */ = {
+			isa = PBXGroup;
+			children = (
+				C931989E19E385E100E46E22 /* AppDelegate.h */,
+				C931989F19E385E100E46E22 /* AppDelegate.m */,
+				C93198A119E385E100E46E22 /* LoginViewController.h */,
+				C93198A219E385E100E46E22 /* LoginViewController.m */,
+				C94B244019E5D97D00005DEF /* EventsViewController.h */,
+				C94B244119E5D97D00005DEF /* EventsViewController.m */,
+				C94B244319E5EA9C00005DEF /* AddViewController.h */,
+				C94B244419E5EA9C00005DEF /* AddViewController.m */,
+				C93198A419E385E100E46E22 /* Main.storyboard */,
+				C93198A719E385E100E46E22 /* Images.xcassets */,
+				C93198A919E385E100E46E22 /* LaunchScreen.xib */,
+				C931989A19E385E100E46E22 /* Supporting Files */,
+			);
+			path = EventBook;
+			sourceTree = "<group>";
+		};
+		C931989A19E385E100E46E22 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C931989B19E385E100E46E22 /* Info.plist */,
+				C931989C19E385E100E46E22 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C93198B319E385E100E46E22 /* EventBookTests */ = {
+			isa = PBXGroup;
+			children = (
+				C93198B619E385E100E46E22 /* EventBookTests.m */,
+				C93198B419E385E100E46E22 /* Supporting Files */,
+			);
+			path = EventBookTests;
+			sourceTree = "<group>";
+		};
+		C93198B419E385E100E46E22 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C93198B519E385E100E46E22 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C94B242519E4D95000005DEF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */,
+				C94B243C19E4DA5B00005DEF /* StoreKit.framework */,
+				C94B243A19E4DA5300005DEF /* Security.framework */,
+				C94B243819E4DA4A00005DEF /* QuartzCore.framework */,
+				C94B243619E4DA3800005DEF /* MobileCoreServices.framework */,
+				C94B243419E4DA2C00005DEF /* libz.dylib */,
+				C94B243219E4DA1600005DEF /* CoreLocation.framework */,
+				C94B243019E4DA1000005DEF /* CoreGraphics.framework */,
+				C94B242E19E4DA0800005DEF /* CFNetwork.framework */,
+				C94B242C19E4DA0300005DEF /* AudioToolbox.framework */,
+				C94B242619E4D9B400005DEF /* Bolts.framework */,
+				C94B242719E4D9B400005DEF /* Parse.framework */,
+				C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C931989619E385E100E46E22 /* EventBook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C93198BA19E385E100E46E22 /* Build configuration list for PBXNativeTarget "EventBook" */;
+			buildPhases = (
+				C931989319E385E100E46E22 /* Sources */,
+				C931989419E385E100E46E22 /* Frameworks */,
+				C931989519E385E100E46E22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EventBook;
+			productName = EventBook;
+			productReference = C931989719E385E100E46E22 /* EventBook.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C93198AF19E385E100E46E22 /* EventBookTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C93198BD19E385E100E46E22 /* Build configuration list for PBXNativeTarget "EventBookTests" */;
+			buildPhases = (
+				C93198AC19E385E100E46E22 /* Sources */,
+				C93198AD19E385E100E46E22 /* Frameworks */,
+				C93198AE19E385E100E46E22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C93198B219E385E100E46E22 /* PBXTargetDependency */,
+			);
+			name = EventBookTests;
+			productName = EventBookTests;
+			productReference = C93198B019E385E100E46E22 /* EventBookTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C931988F19E385E100E46E22 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = com.fullsail;
+				TargetAttributes = {
+					C931989619E385E100E46E22 = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					C93198AF19E385E100E46E22 = {
+						CreatedOnToolsVersion = 6.0.1;
+						TestTargetID = C931989619E385E100E46E22;
+					};
+				};
+			};
+			buildConfigurationList = C931989219E385E100E46E22 /* Build configuration list for PBXProject "EventBook" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C931988E19E385E100E46E22;
+			productRefGroup = C931989819E385E100E46E22 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C931989619E385E100E46E22 /* EventBook */,
+				C93198AF19E385E100E46E22 /* EventBookTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C931989519E385E100E46E22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C93198A619E385E100E46E22 /* Main.storyboard in Resources */,
+				C93198AB19E385E100E46E22 /* LaunchScreen.xib in Resources */,
+				C93198A819E385E100E46E22 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C93198AE19E385E100E46E22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C931989319E385E100E46E22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C94B244519E5EA9C00005DEF /* AddViewController.m in Sources */,
+				C93198A319E385E100E46E22 /* LoginViewController.m in Sources */,
+				C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */,
+				C93198A019E385E100E46E22 /* AppDelegate.m in Sources */,
+				C931989D19E385E100E46E22 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C93198AC19E385E100E46E22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C93198B719E385E100E46E22 /* EventBookTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C93198B219E385E100E46E22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C931989619E385E100E46E22 /* EventBook */;
+			targetProxy = C93198B119E385E100E46E22 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C93198A419E385E100E46E22 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C93198A519E385E100E46E22 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C93198A919E385E100E46E22 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C93198AA19E385E100E46E22 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C93198B819E385E100E46E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C93198B919E385E100E46E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C93198BB19E385E100E46E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EventBook",
+				);
+				INFOPLIST_FILE = EventBook/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos7.0;
+			};
+			name = Debug;
+		};
+		C93198BC19E385E100E46E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EventBook",
+				);
+				INFOPLIST_FILE = EventBook/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos7.0;
+			};
+			name = Release;
+		};
+		C93198BE19E385E100E46E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = EventBookTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EventBook.app/EventBook";
+			};
+			name = Debug;
+		};
+		C93198BF19E385E100E46E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = EventBookTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos7.0;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EventBook.app/EventBook";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C931989219E385E100E46E22 /* Build configuration list for PBXProject "EventBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C93198B819E385E100E46E22 /* Debug */,
+				C93198B919E385E100E46E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C93198BA19E385E100E46E22 /* Build configuration list for PBXNativeTarget "EventBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C93198BB19E385E100E46E22 /* Debug */,
+				C93198BC19E385E100E46E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C93198BD19E385E100E46E22 /* Build configuration list for PBXNativeTarget "EventBookTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C93198BE19E385E100E46E22 /* Debug */,
+				C93198BF19E385E100E46E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C931988F19E385E100E46E22 /* Project object */;
+}

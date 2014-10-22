@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import <Parse/Parse.h>
 #import "EventsViewController.h"
+#import "NetworkManager.h"
 
 @interface LoginViewController ()
 
@@ -84,33 +85,41 @@ bool rememberMe = false;
     {//login button tapped
         if (nameLength > 0) {
             if (passLength > 0) {
-                //attempt to log in the user using the supplied credentials
-                [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
-                    if (user) {
-                        //log in successful, send to 'view' activity
-                        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                        UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
-                        //clear out our password field so it doesn't retain the user's password
-                        password.text = @"";
-                        
-                        //record the 'remember me' preference
-                    
-                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                        if ([saveToggle isOn]) {
-                            [defaults setBool:true forKey:@"rememberUser"];
+                bool isConnected = [[NetworkManager GetIntance] networkConnected];
+                if (isConnected) {
+                    //attempt to log in the user using the supplied credentials
+                    NSLog(@"User entered was:  %@", name );
+                    NSLog(@"Password entered was:  %@", pass );
+                    [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
+                        if (user) {
+                            //log in successful, send to 'view' activity
+                            UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                            UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                            //clear out our password field so it doesn't retain the user's password
+                            password.text = @"";
+                            
+                            //record the 'remember me' preference
+                            
+                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                            if ([saveToggle isOn]) {
+                                [defaults setBool:true forKey:@"rememberUser"];
+                            } else {
+                                [defaults setBool:false forKey:@"rememberUser"];
+                            }
+                            [defaults synchronize];
+                            //ensure our error text is invisible, in case the user logs out from the 'view' activity
+                            errorText.hidden = true;
+                            [self presentViewController:eventView animated:YES completion:nil];
+                            
                         } else {
-                            [defaults setBool:false forKey:@"rememberUser"];
+                            //error logging in, alert user
+                            [self showError:@"login"];
                         }
-                        [defaults synchronize];
-                        //ensure our error text is invisible, in case the user logs out from the 'view' activity
-                        errorText.hidden = true;
-                        [self presentViewController:eventView animated:YES completion:nil];
-                        
-                    } else {
-                       //error logging in, alert user
-                        [self showError:@"login"];
-                    }
-                }];
+                    }];
+                } else {
+                    NSLog(@"NO INTERNET CONNECTION!");
+                }
+                
             } else {
                 [self showError:@"password"];
             }

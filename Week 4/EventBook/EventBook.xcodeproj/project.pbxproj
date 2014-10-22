@@ -14,6 +14,9 @@
 		C93198A819E385E100E46E22 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C93198A719E385E100E46E22 /* Images.xcassets */; };
 		C93198AB19E385E100E46E22 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C93198A919E385E100E46E22 /* LaunchScreen.xib */; };
 		C93198B719E385E100E46E22 /* EventBookTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C93198B619E385E100E46E22 /* EventBookTests.m */; };
+		C93A996919F857E500BDF347 /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C93A996819F857E500BDF347 /* NetworkManager.m */; };
+		C93A996B19F8595600BDF347 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C93A996A19F8595600BDF347 /* SystemConfiguration.framework */; };
+		C93A996E19F85AE700BDF347 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C93A996D19F85AE700BDF347 /* Reachability.m */; };
 		C94B242919E4D9B400005DEF /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242619E4D9B400005DEF /* Bolts.framework */; };
 		C94B242A19E4D9B400005DEF /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242719E4D9B400005DEF /* Parse.framework */; };
 		C94B242B19E4D9B400005DEF /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */; };
@@ -55,6 +58,11 @@
 		C93198B019E385E100E46E22 /* EventBookTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventBookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C93198B519E385E100E46E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C93198B619E385E100E46E22 /* EventBookTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventBookTests.m; sourceTree = "<group>"; };
+		C93A996719F857E500BDF347 /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
+		C93A996819F857E500BDF347 /* NetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkManager.m; sourceTree = "<group>"; };
+		C93A996A19F8595600BDF347 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		C93A996C19F85AE700BDF347 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		C93A996D19F85AE700BDF347 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C94B242619E4D9B400005DEF /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = EventBook/Bolts.framework; sourceTree = "<group>"; };
 		C94B242719E4D9B400005DEF /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = EventBook/Parse.framework; sourceTree = "<group>"; };
 		C94B242819E4D9B400005DEF /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = EventBook/ParseFacebookUtils.framework; sourceTree = "<group>"; };
@@ -79,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C93A996B19F8595600BDF347 /* SystemConfiguration.framework in Frameworks */,
 				C94B243F19E4DA6200005DEF /* SystemConfiguration.framework in Frameworks */,
 				C94B243D19E4DA5B00005DEF /* StoreKit.framework in Frameworks */,
 				C94B243B19E4DA5300005DEF /* Security.framework in Frameworks */,
@@ -139,6 +148,10 @@
 				C93198A719E385E100E46E22 /* Images.xcassets */,
 				C93198A919E385E100E46E22 /* LaunchScreen.xib */,
 				C931989A19E385E100E46E22 /* Supporting Files */,
+				C93A996719F857E500BDF347 /* NetworkManager.h */,
+				C93A996819F857E500BDF347 /* NetworkManager.m */,
+				C93A996C19F85AE700BDF347 /* Reachability.h */,
+				C93A996D19F85AE700BDF347 /* Reachability.m */,
 			);
 			path = EventBook;
 			sourceTree = "<group>";
@@ -172,6 +185,7 @@
 		C94B242519E4D95000005DEF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C93A996A19F8595600BDF347 /* SystemConfiguration.framework */,
 				C94B243E19E4DA6200005DEF /* SystemConfiguration.framework */,
 				C94B243C19E4DA5B00005DEF /* StoreKit.framework */,
 				C94B243A19E4DA5300005DEF /* Security.framework */,
@@ -292,7 +306,9 @@
 				C94B244519E5EA9C00005DEF /* AddViewController.m in Sources */,
 				C93198A319E385E100E46E22 /* LoginViewController.m in Sources */,
 				C94B244219E5D97D00005DEF /* EventsViewController.m in Sources */,
+				C93A996E19F85AE700BDF347 /* Reachability.m in Sources */,
 				C93198A019E385E100E46E22 /* AppDelegate.m in Sources */,
+				C93A996919F857E500BDF347 /* NetworkManager.m in Sources */,
 				C931989D19E385E100E46E22 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

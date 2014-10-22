@@ -16,6 +16,8 @@
 }
 
 -(IBAction)onClick:(id)sender;
+-(IBAction)datePickerChanged:(id)sender;
+
 
 @property (nonatomic, strong) NSString *eventTitle;
 @property (nonatomic, strong) NSString *eventId;

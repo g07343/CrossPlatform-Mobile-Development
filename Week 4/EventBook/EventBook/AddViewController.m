@@ -110,9 +110,10 @@ NSDate *selectedDate;
                         int itemsUpdated = 0;
                         
                         //only update the data that was changed
-                        if (eventTitle != eventName) {
+                        if (![eventTitle isEqualToString:eventName]) {
                             oldObject[@"name"] = eventName;
                             itemsUpdated ++;
+                            NSLog(@"name");
                         }
                         
                         //convert original values back to ints for comparison
@@ -124,30 +125,40 @@ NSDate *selectedDate;
                         if (convertedMonth != month) {
                             oldObject[@"month"] = @(month);
                             itemsUpdated ++;
+                            NSLog(@"month");
                         }
                         
                         if (convertedDay != day) {
                             oldObject[@"day"] = @(day);
                             itemsUpdated ++;
+                            NSLog(@"day");
                         }
                         
                         if (convertedHour != hour) {
                             oldObject[@"hour"] = @(hour);
                             itemsUpdated ++;
+                            NSLog(@"hour");
                         }
                         
                         if (convertedMinute != minute) {
                             oldObject[@"minute"] = @(minute);
                             itemsUpdated ++;
+                            NSLog(@"minute");
                         }
                         
                         //save out the newly created object only if at least one thing was changed
                         if (itemsUpdated > 0) {
+                            NSLog(@"Number of items updated was:  %d", itemsUpdated);
                             [oldObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                 if (succeeded) {
                                     [self dismissViewControllerAnimated:true completion:nil];
                                 }
                             }];
+                        } else {
+                            //no changes were made, so let the user know
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Changes" message:@"Please change your event to edit it." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                            
+                            [alert show];
                         }
                     }
                 }];
@@ -199,6 +210,15 @@ NSDate *selectedDate;
 -(void)keyboardWillHide:(NSNotification *)notification {
     //hide our 'close' button again
     closeKeyboard.hidden = true;
+}
+
+//this method lets us keep the user from selecting a date older than today
+-(IBAction)datePickerChanged:(id)sender {
+    //create the 'now' date
+    NSDate *now = [[NSDate alloc] initWithTimeIntervalSinceNow:(NSTimeInterval)0];
+    
+    if ( [ datePicker.date timeIntervalSinceNow ] < 0 )
+        datePicker.date = now;
 }
 
 @end

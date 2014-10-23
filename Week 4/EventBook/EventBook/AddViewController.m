@@ -101,145 +101,152 @@ NSDate *selectedDate;
             //ensure we have a network connection
             bool isConnected = [[NetworkManager GetIntance] networkConnected];
             if (isConnected) {
-                NSLog(@"Network Connected in add!");
-                //network enabled
-                //check whether we are editing or if we are currently creating a new event
-                if (eventTitle != nil) {
-                    //grab the original object from parse so we can modify it
-                    PFQuery *query = [PFQuery queryWithClassName:@"Event"];
-                    [query whereKey:@"objectId" equalTo:eventId];
-                    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                        if (!error) {
-                            PFObject *oldObject = objects[0];
-                            
-                            //create an int counter to track the number of items that were changed
-                            int itemsUpdated = 0;
-                            
-                            //only update the data that was changed
-                            if (![eventTitle isEqualToString:eventName]) {
-                                oldObject[@"name"] = eventName;
-                                itemsUpdated ++;
-                                NSLog(@"name");
+                //network enabled, so ensure we have a logged in user
+                PFUser *current = [PFUser currentUser];
+                if (current != nil) {
+                    //there was a logged in user, so it's safe to save event
+                    //check whether we are editing or if we are currently creating a new event
+                    if (eventTitle != nil) {
+                        //grab the original object from parse so we can modify it
+                        PFQuery *query = [PFQuery queryWithClassName:@"Event"];
+                        [query whereKey:@"objectId" equalTo:eventId];
+                        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                            if (!error) {
+                                
+                                for (int i = 0; i < objects.count; i++) {
+                                    PFObject *oldObject = objects[0];
+                                }
+                                PFObject *oldObject = objects[0];
+                                
+                                //create an int counter to track the number of items that were changed
+                                int itemsUpdated = 0;
+                                
+                                //only update the data that was changed
+                                if (![eventTitle isEqualToString:eventName]) {
+                                    oldObject[@"name"] = eventName;
+                                    itemsUpdated ++;
+                                    NSLog(@"name");
+                                }
+                                
+                                //convert original values back to ints for comparison
+                                int convertedDay = [eventDay integerValue];
+                                int convertedMonth = [eventMonth integerValue];
+                                int convertedHour = [eventHour integerValue];
+                                int convertedMinute = [eventMinute integerValue];
+                                
+                                if (convertedMonth != month) {
+                                    oldObject[@"month"] = @(month);
+                                    itemsUpdated ++;
+                                    NSLog(@"month");
+                                }
+                                
+                                if (convertedDay != day) {
+                                    oldObject[@"day"] = @(day);
+                                    itemsUpdated ++;
+                                    NSLog(@"day");
+                                }
+                                
+                                if (convertedHour != hour) {
+                                    oldObject[@"hour"] = @(hour);
+                                    itemsUpdated ++;
+                                    NSLog(@"hour");
+                                }
+                                
+                                if (convertedMinute != minute) {
+                                    oldObject[@"minute"] = @(minute);
+                                    itemsUpdated ++;
+                                    NSLog(@"minute");
+                                }
+                                
+                                //save out the newly created object only if at least one thing was changed
+                                if (itemsUpdated > 0) {
+                                    NSLog(@"Number of items updated was:  %d", itemsUpdated);
+                                    [oldObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                        if (succeeded) {
+                                            
+                                            //create an update 'token' so that other devices running the app know data was updated
+                                            PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
+                                            int value;
+                                            value = (arc4random());
+                                            NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+                                            
+                                            //store token value to  user prefs
+                                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                            [defaults setValue:convertedInt forKey:@"editKey"];
+                                            [defaults synchronize];
+                                            
+                                            //set id value to the PFObject
+                                            token[@"editKey"] = convertedInt;
+                                            
+                                            
+                                            token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                                            [token saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                                                if (succeeded) {
+                                                    [self dismissViewControllerAnimated:true completion:nil];
+                                                }
+                                            }];
+                                            
+                                            
+                                        }
+                                    }];
+                                } else {
+                                    //no changes were made, so let the user know
+                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Changes" message:@"Please change your event to edit it." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                                    
+                                    [alert show];
+                                }
                             }
-                            
-                            //convert original values back to ints for comparison
-                            int convertedDay = [eventDay integerValue];
-                            int convertedMonth = [eventMonth integerValue];
-                            int convertedHour = [eventHour integerValue];
-                            int convertedMinute = [eventMinute integerValue];
-                            
-                            if (convertedMonth != month) {
-                                oldObject[@"month"] = @(month);
-                                itemsUpdated ++;
-                                NSLog(@"month");
-                            }
-                            
-                            if (convertedDay != day) {
-                                oldObject[@"day"] = @(day);
-                                itemsUpdated ++;
-                                NSLog(@"day");
-                            }
-                            
-                            if (convertedHour != hour) {
-                                oldObject[@"hour"] = @(hour);
-                                itemsUpdated ++;
-                                NSLog(@"hour");
-                            }
-                            
-                            if (convertedMinute != minute) {
-                                oldObject[@"minute"] = @(minute);
-                                itemsUpdated ++;
-                                NSLog(@"minute");
-                            }
-                            
-                            //save out the newly created object only if at least one thing was changed
-                            if (itemsUpdated > 0) {
-                                NSLog(@"Number of items updated was:  %d", itemsUpdated);
-                                [oldObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        }];
+                        
+                    } else {
+                        //now that we have all of the data, save it out to the user's account on parse
+                        PFObject *event = [PFObject objectWithClassName:@"Event"];
+                        event[@"name"] = eventName;
+                        event[@"month"] = @(month);
+                        event[@"day"] = @(day);
+                        event[@"hour"] = @(hour);
+                        event[@"minute"] = @(minute);
+                        
+                        //set the ACL restriction to the current user
+                        event.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                        
+                        [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                            if (succeeded) {
+                                
+                                //create a token object to signal other devices with app open
+                                
+                                //create an update 'token' so that other devices running the app know data was updated
+                                PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
+                                int value;
+                                value = (arc4random());
+                                NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+                                
+                                //store token value to  user prefs
+                                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                [defaults setValue:convertedInt forKey:@"editKey"];
+                                [defaults synchronize];
+                                
+                                //set id value to the PFObject
+                                token[@"editKey"] = convertedInt;
+                                
+                                
+                                token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                                [token saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
                                     if (succeeded) {
-                                        
-                                        //create an update 'token' so that other devices running the app know data was updated
-                                        PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
-                                        int value;
-                                        value = (arc4random());
-                                        NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
-                                        
-                                        //store token value to  user prefs
-                                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                        [defaults setValue:convertedInt forKey:@"editKey"];
-                                        [defaults synchronize];
-                                        
-                                        //set id value to the PFObject
-                                        token[@"editKey"] = convertedInt;
-                                        
-                                        
-                                        token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                                        [token saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-                                            if (succeeded) {
-                                                [self dismissViewControllerAnimated:true completion:nil];
-                                            }
-                                        }];
-                                        
-                                        
+                                        [self dismissViewControllerAnimated:true completion:nil];
                                     }
                                 }];
                             } else {
-                                //no changes were made, so let the user know
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Changes" message:@"Please change your event to edit it." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
                                 
-                                [alert show];
                             }
-                        }
-                    }];
-                    
+                        }];
+                    }
                 } else {
-                    //now that we have all of the data, save it out to the user's account on parse
-                    PFObject *event = [PFObject objectWithClassName:@"Event"];
-                    event[@"name"] = eventName;
-                    event[@"month"] = @(month);
-                    event[@"day"] = @(day);
-                    event[@"hour"] = @(hour);
-                    event[@"minute"] = @(minute);
-                    
-                    //set the ACL restriction to the current user
-                    event.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                    
-                    [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-                        if (succeeded) {
-                            
-                            //create a token object to signal other devices with app open
-                            
-                            //create an update 'token' so that other devices running the app know data was updated
-                            PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
-                            int value;
-                            value = (arc4random());
-                            NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
-                            
-                            //store token value to  user prefs
-                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                            [defaults setValue:convertedInt forKey:@"editKey"];
-                            [defaults synchronize];
-                            
-                            //set id value to the PFObject
-                            token[@"editKey"] = convertedInt;
-                            
-                            
-                            token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                            [token saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
-                                if (succeeded) {
-                                    [self dismissViewControllerAnimated:true completion:nil];
-                                }
-                            }];
-                        } else {
-                            
-                        }
-                    }];
+                    //no currently logged in user, so block saving
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login error" message:@"You do not appear to be logged in to EventBook.  Please return to the login screen to save events." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                    [alert show];
                 }
-                
-                
             } else {
-                
-                
                 //no internet connection, alert user
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection" message:@"You do not currently have a network connection.  Please reconnect to the internet before creating or modifying your event." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
                 [alert show];

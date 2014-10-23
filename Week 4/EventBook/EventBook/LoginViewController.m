@@ -11,7 +11,7 @@
 #import "EventsViewController.h"
 #import "NetworkManager.h"
 
-@interface LoginViewController ()
+@interface LoginViewController () 
 
 @end
 
@@ -88,11 +88,6 @@ bool rememberMe = false;
                 bool isConnected = [[NetworkManager GetIntance] networkConnected];
                 if (isConnected) {
                     //attempt to log in the user using the supplied credentials
-                    int value;
-                    value = (arc4random());
-                    NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
-                    NSLog(@"random int is:  %d", value);
-                    NSLog(@"converted to string is:  %@", convertedInt);
                     
                     [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
                         if (user) {
@@ -121,7 +116,10 @@ bool rememberMe = false;
                         }
                     }];
                 } else {
-                    NSLog(@"NO INTERNET CONNECTION!");
+                    //no internet connection, so give option to go into 'offline' mode
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection" message:@"You do not currently have a network connection.   Enter the app in offline mode?  NOTE:  Any data entered may not be saved!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Go offline", nil];
+                    alert.tag = 27;
+                    [alert show];
                 }
                 
             } else {
@@ -135,55 +133,82 @@ bool rememberMe = false;
         NSLog(@"Username is:  %@ and password is: %@", name, pass);
         NSLog(@"Length of username is:  %lu", (unsigned long)nameLength);
         
-        //ensure the user input a username and password
-        if (nameLength > 0) {
-            if (passLength > 0) {
-                //credentials supplied correctly, so attempt to register a new user
-                PFUser *user = [PFUser user];
-                user.username = name;
-                user.password = pass;
-                
-                //now send it to parse and check the the response
-                [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (!error) {
-                        //new user created, send to the 'view' activity
-                        NSLog(@"user created!");
-                        UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                        UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
-                        //clear out our password field so it doesn't retain the user's password
-                        password.text = @"";
-                        
-                        //record the 'remember me' preference
-                        
-                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                        if (saveToggle.isOn) {
-                            [defaults setBool:true forKey:@"rememberUser"];
+        //ensure we have a network connection
+        bool isConnected = [[NetworkManager GetIntance] networkConnected];
+        if (isConnected) {
+            //network is good
+            //ensure the user input a username and password
+            if (nameLength > 0) {
+                if (passLength > 0) {
+                    //credentials supplied correctly, so attempt to register a new user
+                    PFUser *user = [PFUser user];
+                    user.username = name;
+                    user.password = pass;
+                    
+                    //now send it to parse and check the the response
+                    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (!error) {
+                            //new user created, send to the 'view' activity
+                            NSLog(@"user created!");
+                            UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                            UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                            //clear out our password field so it doesn't retain the user's password
+                            password.text = @"";
+                            
+                            //record the 'remember me' preference
+                            
+                            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                            if (saveToggle.isOn) {
+                                [defaults setBool:true forKey:@"rememberUser"];
+                            } else {
+                                [defaults setBool:false forKey:@"rememberUser"];
+                            }
+                            [defaults synchronize];
+                            //ensure our error text is invisible, in case the user logs out from the 'view' activity
+                            errorText.hidden = true;
+                            [self presentViewController:eventView animated:YES completion:nil];
                         } else {
-                            [defaults setBool:false forKey:@"rememberUser"];
+                            //error signing up so alert user
+                            [self showError:@"signUp"];
                         }
-                        [defaults synchronize];
-                        //ensure our error text is invisible, in case the user logs out from the 'view' activity
-                        errorText.hidden = true;
-                        [self presentViewController:eventView animated:YES completion:nil];
-                    } else {
-                        //error signing up so alert user
-                        [self showError:@"signUp"];
-                    }
-                }];
-                
+                    }];
+                    
+                } else {
+                    //user didn't input a password so show error
+                    [self showError:@"password"];
+                }
             } else {
-                //user didn't input a password so show error
-                [self showError:@"password"];
+                //user didn't input a user name
+                [self showError:@"userName"];
             }
         } else {
-            //user didn't input a user name
-            [self showError:@"userName"];
+            //no internet connection alert user
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection" message:@"You do not currently have a network connection.  Please reconnect to the internet before attempting to create a new account." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+            [alert show];
         }
+        
+        
         
     } else if (button.tag == 2) {
         //close keyboard button tapped
         [userName resignFirstResponder];
         [password resignFirstResponder];
+    }
+}
+
+//this allows us to detect which choice the user selects when trying to log in with no network connection
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    //ensure we are only checking the alert that displays when trying to log in
+    if (alertView.tag == 27) {
+        if (buttonIndex == 0) {
+            NSLog(@"index was 0");
+        } else if (buttonIndex == 1) {
+            NSLog(@"index was 1");
+            UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+            errorText.hidden = true;
+            [self presentViewController:eventView animated:YES completion:nil];
+        }
     }
 }
 

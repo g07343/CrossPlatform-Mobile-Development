@@ -29,6 +29,7 @@ int selectedEvent;
 bool isEditing;
 NSTimer *pollingTimer;
 int updateCounter;
+bool wasDisplayed;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,6 +46,9 @@ int updateCounter;
     
     //set initial value for our polling counter
     updateCounter = 0;
+    
+    //set initial bool for 'wasDisplayed'
+    wasDisplayed = false;
     
     //set up a timer to poll parse
     //pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(pollParse) userInfo:nil repeats:YES];
@@ -98,13 +102,30 @@ int updateCounter;
                 }
             }];
         } else {
-            //no current user, so offer login
-            
+            if (wasDisplayed == false) {
+                //no current user, so offer login
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Connection Reestablished" message:@"Internet connection restored.  You aren't currently logged in.  Log in now?  NOTE: You will return to the login screen.  This message will not show again." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Login", nil];
+                alert.tag = 25;
+                [alert show];
+                
+                //set boolean to true so we aren't showing this alert every 15 seconds after network restoration
+                wasDisplayed = true;
+            }
         }
     } else {
         //no network
         tableLabel.text = @"No network detected.  Running in offline mode.";
         tableLabel.textColor = [UIColor redColor];
+    }
+}
+
+//this allows us to detect which choice the user selects when trying to log in with no network connection
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    //ensure we are only checking the alert that displays when trying to log in
+    if (alertView.tag == 25) {
+        if (buttonIndex == 1) {
+            [self dismissViewControllerAnimated:true completion:nil];
+        }
     }
 }
 

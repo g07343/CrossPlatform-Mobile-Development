@@ -89,7 +89,7 @@
                   symbolName = "-[LoginViewController onClick:]"
                   moduleName = "EventBook"
                   urlString = "file:///Users/Matt/Desktop/MDF%203%20Stuff/CPM%20Repository/CrossPlatform-Mobile-Development/Week%204/EventBook/EventBook/LoginViewController.m"
-                  timestampString = "435710426.978123"
+                  timestampString = "435722807.017773"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "97"
@@ -103,7 +103,7 @@
                   symbolName = "__31-[LoginViewController onClick:]_block_invoke"
                   moduleName = "EventBook"
                   urlString = "file:///Users/Matt/Desktop/MDF%203%20Stuff/CPM%20Repository/CrossPlatform-Mobile-Development/Week%204/EventBook/EventBook/LoginViewController.m"
-                  timestampString = "435710426.978253"
+                  timestampString = "435722807.017905"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "97"
@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EventBook/AddViewController.m"
-            timestampString = "435710269.589192"
+            timestampString = "435716645.815152"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "-onClick:"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EventBook/AddViewController.m"
-            timestampString = "435710272.447274"
+            timestampString = "435716646.753015"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "-onClick:"
             landmarkType = "5">
          </BreakpointContent>
@@ -152,11 +152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EventBook/AddViewController.m"
-            timestampString = "435710274.022592"
+            timestampString = "435716736.686197"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
             landmarkName = "-onClick:"
             landmarkType = "5">
          </BreakpointContent>
@@ -168,11 +168,75 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EventBook/AddViewController.m"
-            timestampString = "435710275.502711"
+            timestampString = "435716737.862444"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435716740.289054"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435716741.486206"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "240"
+            endingLineNumber = "240"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435716742.438422"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435716775.745018"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
             landmarkName = "-onClick:"
             landmarkType = "5">
          </BreakpointContent>

@@ -9,6 +9,7 @@
 #import "EventsViewController.h"
 #import <Parse/Parse.h>
 #import "AddViewController.h"
+#import "NetworkManager.h"
 
 @interface EventsViewController () 
 
@@ -26,6 +27,8 @@ NSMutableArray *eventNames;
 
 int selectedEvent;
 bool isEditing;
+NSTimer *pollingTimer;
+int updateCounter;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,6 +42,70 @@ bool isEditing;
     
     //set up initial value for our isEditing bool to false
     isEditing = false;
+    
+    //set initial value for our polling counter
+    updateCounter = 0;
+    
+    //set up a timer to poll parse
+    //pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(pollParse) userInfo:nil repeats:YES];
+    
+    NSLog(@"viewDidLoad runs!");
+}
+
+-(void)pollParse {
+    NSLog(@"pollParse function runs!");
+    bool isConnected = [[NetworkManager GetIntance] networkConnected];
+    if (isConnected) {
+        PFUser *current = [PFUser currentUser];
+        if (current != nil) {
+            //grab local 'update' key to check against one on Parse (if there is one)
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            
+            NSString *lastKey = [defaults valueForKey:@"editKey"];
+            
+            //grab any remote update 'tokens' for this account
+            PFQuery *query = [PFQuery queryWithClassName:@"wasUpdated"];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                //ensure we have at least one object
+                if (objects != nil && objects.count > 0) {
+                    //grab the first item to check it's value
+                    PFObject *remoteToken = [objects objectAtIndex:0];
+                    
+                    //grab the attached string to compare
+                    NSString *remoteKey = [remoteToken objectForKey:@"editKey"];
+                    
+                    //compare the string, if different, data was updated somewhere else so pull new data
+                    if (![lastKey isEqualToString:remoteKey]) {
+                        NSLog(@"Update keys were different!");
+                        updateCounter ++;
+                        if (updateCounter > 2) {
+                            //reset our counter
+                            updateCounter = 0;
+                            
+                            //delete remote token
+                            NSString *deleteKey = [remoteToken objectId];
+                            PFQuery *deleteQuery = [PFQuery queryWithClassName:@"wasUpdated"];
+                            [deleteQuery getObjectInBackgroundWithId:deleteKey block:^(PFObject *object, NSError *error) {
+                                if (!error) {
+                                    //delete this update key since there has been enough time for everything to update across devices
+                                    [object deleteInBackground];
+                                }
+                            }];
+                        }
+                        //update remote data
+                        [self updateTableView];
+                    }
+                }
+            }];
+        } else {
+            //no current user, so offer login
+            
+        }
+    } else {
+        //no network
+        tableLabel.text = @"No network detected.  Running in offline mode.";
+        tableLabel.textColor = [UIColor redColor];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,68 +120,104 @@ bool isEditing;
     
     //ensure we're updating the table view whenever the view appears
     [self updateTableView];
+    
+    //also, ensure we have a valid timer going
+    if (pollingTimer == nil) {
+        pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(pollParse) userInfo:nil repeats:YES];
+    }
+}
+
+//use this to pause our timer from running needlessly
+-(void)viewWillDisappear:(BOOL)animated {
+    if (pollingTimer != nil) {
+        [pollingTimer invalidate];
+        pollingTimer = nil;
+    }
 }
 
 //this method is responsible for keeping our table view updated with the remote data,
 //and is fired whenever this activity becomes visible, or when the user deletes and item
 -(void)updateTableView {
-    //grab whatever events are stored on Parse for this account
-    PFQuery *query = [PFQuery queryWithClassName:@"Event"];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            // set up our arrays to store data
-            eventArray = [NSMutableArray arrayWithCapacity:objects.count];
-            eventIds = [NSMutableArray arrayWithCapacity:objects.count];
-            eventMonths = [NSMutableArray arrayWithCapacity:objects.count];
-            eventDays = [NSMutableArray arrayWithCapacity:objects.count];
-            eventHours = [NSMutableArray arrayWithCapacity:objects.count];
-            eventMinutes = [NSMutableArray arrayWithCapacity:objects.count];
-            eventNames = [NSMutableArray arrayWithCapacity:objects.count];
+    //ensure we have a valid network connection
+    bool isConnected = [[NetworkManager GetIntance] networkConnected];
+    if (isConnected) {
+        //internet connection is good, ensure we have a logged in user
+        PFUser *current = [PFUser currentUser];
+        if (current != nil) {
+            //user is logged in, so go ahead and pull data
+            //grab whatever events are stored on Parse for this account
+            PFQuery *query = [PFQuery queryWithClassName:@"Event"];
             
-            if (objects.count > 0) {
-                // grab the data we need from each found event
-                for (int i = 0; i < objects.count; i ++) {
-                    PFObject *object = objects[i];
-                    NSString *eventTitle = object[@"name"];
-                    int month = [[object objectForKey:@"month"] intValue];
-                    int day = [[object objectForKey:@"day"] intValue];
-                    int hour = [[object objectForKey:@"hour"] intValue];
-                    int minute = [[object objectForKey:@"minute"] intValue];
-                    NSString *eventId = object.objectId;
-                    NSString *formattedString = [NSString stringWithFormat:@"%@:  %d/%d  at  %d:%d", eventTitle, month, day, hour, minute];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    // set up our arrays to store data
+                    eventArray = [NSMutableArray arrayWithCapacity:objects.count];
+                    eventIds = [NSMutableArray arrayWithCapacity:objects.count];
+                    eventMonths = [NSMutableArray arrayWithCapacity:objects.count];
+                    eventDays = [NSMutableArray arrayWithCapacity:objects.count];
+                    eventHours = [NSMutableArray arrayWithCapacity:objects.count];
+                    eventMinutes = [NSMutableArray arrayWithCapacity:objects.count];
+                    eventNames = [NSMutableArray arrayWithCapacity:objects.count];
                     
-                    //add final values to our arrays used to populate our table view
-                    eventArray[i] = formattedString;
-                    eventIds[i] = eventId;
+                    if (objects.count > 0) {
+                        //ensure our label is correct
+                        tableLabel.text = @"Your events:";
+                        tableLabel.textColor = [UIColor blackColor];
+                        
+                        // grab the data we need from each found event
+                        for (int i = 0; i < objects.count; i ++) {
+                            PFObject *object = objects[i];
+                            NSString *eventTitle = object[@"name"];
+                            int month = [[object objectForKey:@"month"] intValue];
+                            int day = [[object objectForKey:@"day"] intValue];
+                            int hour = [[object objectForKey:@"hour"] intValue];
+                            int minute = [[object objectForKey:@"minute"] intValue];
+                            NSString *eventId = object.objectId;
+                            NSString *formattedString = [NSString stringWithFormat:@"%@:  %d/%d  at  %d:%d", eventTitle, month, day, hour, minute];
+                            
+                            //add final values to our arrays used to populate our table view
+                            eventArray[i] = formattedString;
+                            eventIds[i] = eventId;
+                            
+                            //need to convert ints to NSNumbers so we can store in an array unfortunately
+                            NSNumber *monthConverted = [NSNumber numberWithInt:month];
+                            NSNumber *dayConverted = [NSNumber numberWithInt:day];
+                            NSNumber *hourConverted = [NSNumber numberWithInt:hour];
+                            NSNumber *minuteConverted = [NSNumber numberWithInt:minute];
+                            
+                            //add retrieved data to arrays
+                            eventNames [i]= eventTitle;
+                            eventMonths[i] = monthConverted;
+                            eventDays[i] = dayConverted;
+                            eventHours[i] = hourConverted;
+                            eventMinutes[i] = minuteConverted;
+                            
+                            
+                        }
+                    } else {
+                        //no events saved to this account, so modify text view to inform user
+                        tableLabel.text = @"No events found.  Tap the '+' button above to get started!";
+                        tableLabel.textColor = [UIColor redColor];
+                    }
                     
-                    //need to convert ints to NSNumbers so we can store in an array unfortunately
-                    NSNumber *monthConverted = [NSNumber numberWithInt:month];
-                    NSNumber *dayConverted = [NSNumber numberWithInt:day];
-                    NSNumber *hourConverted = [NSNumber numberWithInt:hour];
-                    NSNumber *minuteConverted = [NSNumber numberWithInt:minute];
-                    
-                    //add retrieved data to arrays
-                    eventNames [i]= eventTitle;
-                    eventMonths[i] = monthConverted;
-                    eventDays[i] = dayConverted;
-                    eventHours[i] = hourConverted;
-                    eventMinutes[i] = minuteConverted;
-                    
-                    
+                    [tableView reloadData];
+                } else {
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
                 }
-            } else {
-                //no events saved to this account, so modify text view to inform user
-                tableLabel.text = @"No events found.  Tap the '+' button above to get started!";
-                tableLabel.textColor = [UIColor redColor];
-            }
-            
-            [tableView reloadData];
+            }];
         } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
+            //no user was logged in, so offer login
+            
         }
-    }];
+    
+    } else {
+        //no network connection found
+        tableLabel.text = @"No network detected.  Running in offline mode.";
+        tableLabel.textColor = [UIColor redColor];
+    }
+    
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

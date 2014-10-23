@@ -9,6 +9,7 @@
 #import "AddViewController.h"
 #import <Parse/Parse.h>
 #import "NetworkManager.h"
+#import "EventsViewController.h"
 
 @interface AddViewController ()
 
@@ -19,6 +20,19 @@
 @synthesize eventTitle, eventId, eventMonth, eventDay, eventHour, eventMinute;
 NSDate *selectedDate;
 
+@synthesize delegate;
+
+-(void)sendOfflineObject:(PFObject*)object {
+    //-(void)sendOffline:(PFObject*)object;
+    [delegate addOffline:object];
+}
+
+//need these to use if the user decides to save an offline event
+NSString *offlineTitle;
+int offlineDay;
+int offlineMonth;
+int offlineHour;
+int offlineMinute;
 
 
 - (void)viewDidLoad {
@@ -244,7 +258,15 @@ NSDate *selectedDate;
                 }
             } else {
                 //no internet connection, alert user
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection" message:@"You do not currently have a network connection.  Please reconnect to the internet before creating or modifying your event." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Network Connection" message:@"You do not currently have a network connection.  Save event in offline mode?  These events will sync when internet is restored.  WARNING: closing EventBook will lose any offline events!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Add", nil];
+                alert.tag = 21;
+                
+                //set values to global vars in case the user decides to save offline
+                offlineTitle = eventName;
+                offlineMonth = month;
+                offlineDay = day;
+                offlineHour = hour;
+                offlineMinute = minute;
                 [alert show];
             }
             } else {
@@ -252,12 +274,39 @@ NSDate *selectedDate;
                 [alert show];
             }
             
-            
+        
         
         
     } else if (button.tag == 2) {
         //close keyboard
         [eventNameField resignFirstResponder];
+    }
+}
+
+//add delegate method for alert view dismissal
+//this allows us to detect which choice the user selects when trying to log in with no network connection
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    //ensure we are only checking the alert that displays when trying to log in
+    if (alertView.tag == 21) {
+        if (buttonIndex == 0) {
+            NSLog(@"index was 0");
+        } else if (buttonIndex == 1) {
+            //now that we have all of the data, save it out to the user's account on parse
+            PFObject *event = [PFObject objectWithClassName:@"Event"];
+            event[@"name"] = offlineTitle;
+            event[@"month"] = @(offlineMonth);
+            event[@"day"] = @(offlineDay);
+            event[@"hour"] = @(offlineHour);
+            event[@"minute"] = @(offlineMinute);
+            
+            //check if we have a current user and if so, set ACL, otherwise let eventsview controller handle it later
+            if ([PFUser currentUser] != nil) {
+                event.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            }
+            
+            [self sendOfflineObject:event];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
     }
 }
 

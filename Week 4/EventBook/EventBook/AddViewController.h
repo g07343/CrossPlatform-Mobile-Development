@@ -7,8 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
 
-@interface AddViewController : UIViewController
+@protocol sendOfflineObject <NSObject>
+
+-(void)addOffline:(PFObject*)object;
+
+@end
+
+@interface AddViewController : UIViewController <UIAlertViewDelegate>
 {
     IBOutlet UITextField *eventNameField;
     IBOutlet UIDatePicker *datePicker;
@@ -19,6 +26,8 @@
 -(IBAction)datePickerChanged:(id)sender;
 
 
+
+@property(nonatomic, assign)id delegate;
 @property (nonatomic, strong) NSString *eventTitle;
 @property (nonatomic, strong) NSString *eventId;
 @property (nonatomic, strong) NSNumber *eventMonth;

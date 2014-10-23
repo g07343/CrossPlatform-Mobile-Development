@@ -17,6 +17,7 @@
 
 @implementation LoginViewController
 
+NSMutableArray *offlineEvents;
 bool rememberMe = false;
 
 - (void)viewDidLoad {
@@ -48,18 +49,21 @@ bool rememberMe = false;
         if (savePref == false) {
             [PFUser logOut];
         } else {
-            //user wanted to be remembered, so make sure we have a valid user
-            PFUser *currentUser = [PFUser currentUser];
-            if (currentUser != nil) {
-                NSLog(@"User was NOT nill");
-                //previously logged in user found, so send to 'view' activity
-                UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
-                [self presentViewController:eventView animated:YES completion:nil];
-            } else {
-                NSLog(@"User was found to be nill...");
-            }
             
+            bool isConnected = [[NetworkManager GetIntance] networkConnected];
+            if (isConnected == true) {
+                //user wanted to be remembered, so make sure we have a valid user
+                PFUser *currentUser = [PFUser currentUser];
+                if (currentUser != nil) {
+                    NSLog(@"User was NOT nill");
+                    //previously logged in user found, so send to 'view' activity
+                    UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                    UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                    [self presentViewController:eventView animated:YES completion:nil];
+                } else {
+                    NSLog(@"User was found to be nill...");
+                }
+            }
         }
     } else {
         NSLog(@"KEY NOT FOUND");
@@ -88,14 +92,22 @@ bool rememberMe = false;
                 bool isConnected = [[NetworkManager GetIntance] networkConnected];
                 if (isConnected) {
                     //attempt to log in the user using the supplied credentials
-                    
                     [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
                         if (user) {
                             //log in successful, send to 'view' activity
                             UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                            UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                            EventsViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
                             //clear out our password field so it doesn't retain the user's password
                             password.text = @"";
+                            
+                            //check to see if any offline events exist, and if so assign ACL and save
+                            if (offlineEvents != nil && [offlineEvents count] > 0) {
+                                for (int i = 0; i < [offlineEvents count]; i ++) {
+                                    PFObject *object = [offlineEvents objectAtIndex:i];
+                                    [object setACL:[PFACL ACLWithUser:[PFUser currentUser]]];
+                                    [object saveInBackground];
+                                }
+                            }
                             
                             //record the 'remember me' preference
                             
@@ -108,6 +120,10 @@ bool rememberMe = false;
                             [defaults synchronize];
                             //ensure our error text is invisible, in case the user logs out from the 'view' activity
                             errorText.hidden = true;
+                            
+                            //set as the delegate
+                            eventView.delegate = self;
+                            
                             [self presentViewController:eventView animated:YES completion:nil];
                             
                         } else {
@@ -151,7 +167,7 @@ bool rememberMe = false;
                             //new user created, send to the 'view' activity
                             NSLog(@"user created!");
                             UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                            UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+                            EventsViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
                             //clear out our password field so it doesn't retain the user's password
                             password.text = @"";
                             
@@ -166,6 +182,10 @@ bool rememberMe = false;
                             [defaults synchronize];
                             //ensure our error text is invisible, in case the user logs out from the 'view' activity
                             errorText.hidden = true;
+                            
+                            //set as the delegate
+                            eventView.delegate = self;
+                            
                             [self presentViewController:eventView animated:YES completion:nil];
                         } else {
                             //error signing up so alert user
@@ -205,8 +225,11 @@ bool rememberMe = false;
         } else if (buttonIndex == 1) {
             NSLog(@"index was 1");
             UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            UIViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
+            EventsViewController *eventView = [mainStoryBoard instantiateViewControllerWithIdentifier:@"EventsViewController"];
             errorText.hidden = true;
+            
+            //set as delegate for our offline callback function
+            eventView.delegate = self;
             [self presentViewController:eventView animated:YES completion:nil];
         }
     }
@@ -235,6 +258,15 @@ bool rememberMe = false;
 -(void)keyboardWillHide:(NSNotification *)notification {
     //hide our 'close' button again
     closeButton.hidden = true;
+}
+
+//this method is used by the EventsViewController to pass any events created offline so the user can save them once logging in
+-(void)addOfflineObject:(PFObject*)object {
+    NSLog(@"offline adding function runs within login activity!");
+    if (offlineEvents == nil) {
+        offlineEvents = [[NSMutableArray alloc] init];
+    }
+    [offlineEvents addObject:object];
 }
 
 @end

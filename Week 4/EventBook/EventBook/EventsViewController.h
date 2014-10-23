@@ -7,6 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+
+@protocol passOfflineObject <NSObject>
+
+-(void)addOfflineObject:(PFObject*)object;
+
+@end
 
 @interface EventsViewController : UIViewController <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
@@ -17,5 +24,8 @@
 }
 
 -(IBAction)onClick:(id)sender;
+-(void)addOffline:(PFObject*)offlineEvent;
+@property(nonatomic, assign)id delegate;
+@property (nonatomic, strong) NSMutableArray *offlineEvents;
 
 @end

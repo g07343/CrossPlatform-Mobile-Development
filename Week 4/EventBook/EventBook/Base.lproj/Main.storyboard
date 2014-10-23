@@ -149,7 +149,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qwQ-vi-Kea">
-                                <rect key="frame" x="150" y="111" width="300" height="481"/>
+                                <rect key="frame" x="150" y="71" width="300" height="481"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="HxN-lg-61h"/>
@@ -160,7 +160,7 @@
                                 </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your events:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F2s-Ib-Kb3">
-                                <rect key="frame" x="152" y="65" width="298" height="18"/>
+                                <rect key="frame" x="152" y="44" width="298" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="298" id="Ajj-16-RrP"/>
                                 </constraints>
@@ -168,23 +168,38 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Updating..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fa3-Ec-UbE">
+                                <rect key="frame" x="265" y="553" width="72" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Pwp-Rh-bUM">
+                                <rect key="frame" x="237" y="552" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7e4-R2-Ehu" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="4" id="6ky-n6-6pa"/>
                             <constraint firstItem="kfQ-BP-car" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" id="8Em-T1-3PG"/>
-                            <constraint firstItem="9gQ-nq-jVe" firstAttribute="top" secondItem="qwQ-vi-Kea" secondAttribute="bottom" constant="8" id="Cbz-BL-4qh"/>
-                            <constraint firstItem="F2s-Ib-Kb3" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="45" id="F8b-PI-HLC"/>
+                            <constraint firstItem="9gQ-nq-jVe" firstAttribute="top" secondItem="qwQ-vi-Kea" secondAttribute="bottom" constant="48" id="Cbz-BL-4qh"/>
+                            <constraint firstItem="F2s-Ib-Kb3" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="24" id="F8b-PI-HLC"/>
+                            <constraint firstItem="Fa3-Ec-UbE" firstAttribute="leading" secondItem="Pwp-Rh-bUM" secondAttribute="trailing" constant="8" id="IAr-CT-2iM"/>
                             <constraint firstAttribute="centerX" secondItem="qwQ-vi-Kea" secondAttribute="centerX" id="QsJ-rQ-Fyx"/>
-                            <constraint firstItem="qwQ-vi-Kea" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="91" id="XFz-8Y-7gI"/>
+                            <constraint firstItem="qwQ-vi-Kea" firstAttribute="top" secondItem="Egg-tQ-Tgp" secondAttribute="bottom" constant="51" id="XFz-8Y-7gI"/>
                             <constraint firstAttribute="trailing" secondItem="7e4-R2-Ehu" secondAttribute="trailing" constant="16" id="XTz-Xp-1fD"/>
                             <constraint firstItem="kfQ-BP-car" firstAttribute="leading" secondItem="AHz-Wj-N1R" secondAttribute="leading" constant="16" id="dVm-WG-TL8"/>
+                            <constraint firstAttribute="centerX" secondItem="Fa3-Ec-UbE" secondAttribute="centerX" constant="-1" id="haO-yh-1rq"/>
+                            <constraint firstItem="9gQ-nq-jVe" firstAttribute="top" secondItem="Pwp-Rh-bUM" secondAttribute="bottom" constant="28" id="jF2-Mx-O0J"/>
+                            <constraint firstItem="Fa3-Ec-UbE" firstAttribute="top" secondItem="qwQ-vi-Kea" secondAttribute="bottom" constant="1" id="pUC-cF-5bP"/>
                             <constraint firstAttribute="centerX" secondItem="F2s-Ib-Kb3" secondAttribute="centerX" constant="-0.5" id="x6h-KX-j6U"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="tableLabel" destination="F2s-Ib-Kb3" id="huQ-5n-b9M"/>
                         <outlet property="tableView" destination="qwQ-vi-Kea" id="g0w-jU-B2h"/>
+                        <outlet property="updateLabel" destination="Fa3-Ec-UbE" id="xpY-wa-4tZ"/>
+                        <outlet property="updateSpinner" destination="Pwp-Rh-bUM" id="0FI-gL-lmz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dfB-D6-agJ" userLabel="First Responder" sceneMemberID="firstResponder"/>

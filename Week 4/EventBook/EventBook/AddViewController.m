@@ -112,10 +112,6 @@ NSDate *selectedDate;
                         [query whereKey:@"objectId" equalTo:eventId];
                         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                             if (!error) {
-                                
-                                for (int i = 0; i < objects.count; i++) {
-                                    PFObject *oldObject = objects[0];
-                                }
                                 PFObject *oldObject = objects[0];
                                 
                                 //create an int counter to track the number of items that were changed

@@ -12,6 +12,8 @@
 {
     IBOutlet UITableView *tableView;
     IBOutlet UILabel *tableLabel;
+    IBOutlet UIActivityIndicatorView *updateSpinner;
+    IBOutlet UILabel *updateLabel;
 }
 
 -(IBAction)onClick:(id)sender;

@@ -53,7 +53,9 @@ bool wasDisplayed;
     //set up a timer to poll parse
     //pollingTimer = [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(pollParse) userInfo:nil repeats:YES];
     
-    NSLog(@"viewDidLoad runs!");
+    //set our updating UI elements to initially be invisible
+    //updateSpinner.hidden = YES;
+    //updateLabel.hidden = YES;
 }
 
 -(void)pollParse {
@@ -169,6 +171,10 @@ bool wasDisplayed;
             //grab whatever events are stored on Parse for this account
             PFQuery *query = [PFQuery queryWithClassName:@"Event"];
             
+            //since we are updating, inform user that progress is happening
+            updateSpinner.hidden = NO;
+            updateLabel.hidden = NO;
+            
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {
                     // set up our arrays to store data
@@ -220,6 +226,9 @@ bool wasDisplayed;
                         tableLabel.text = @"No events found.  Tap the '+' button above to get started!";
                         tableLabel.textColor = [UIColor redColor];
                     }
+                    //set our updating indicators to not be visible since update is done
+                    updateSpinner.hidden = YES;
+                    updateLabel.hidden = YES;
                     
                     [tableView reloadData];
                 } else {

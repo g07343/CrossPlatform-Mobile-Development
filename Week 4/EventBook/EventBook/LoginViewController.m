@@ -88,8 +88,12 @@ bool rememberMe = false;
                 bool isConnected = [[NetworkManager GetIntance] networkConnected];
                 if (isConnected) {
                     //attempt to log in the user using the supplied credentials
-                    NSLog(@"User entered was:  %@", name );
-                    NSLog(@"Password entered was:  %@", pass );
+                    int value;
+                    value = (arc4random());
+                    NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+                    NSLog(@"random int is:  %d", value);
+                    NSLog(@"converted to string is:  %@", convertedInt);
+                    
                     [PFUser logInWithUsernameInBackground:name password:pass block:^(PFUser *user, NSError *error) {
                         if (user) {
                             //log in successful, send to 'view' activity

@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EventBook/LoginViewController.m"
-            timestampString = "435708619.667494"
+            timestampString = "435709651.851005"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
             landmarkName = "-onClick:"
             landmarkType = "5">
          </BreakpointContent>
@@ -65,6 +65,22 @@
             endingLineNumber = "90"
             landmarkName = "-onClick:"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/LoginViewController.m"
+            timestampString = "435709651.851005"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
@@ -73,12 +89,12 @@
                   symbolName = "-[LoginViewController onClick:]"
                   moduleName = "EventBook"
                   urlString = "file:///Users/Matt/Desktop/MDF%203%20Stuff/CPM%20Repository/CrossPlatform-Mobile-Development/Week%204/EventBook/EventBook/LoginViewController.m"
-                  timestampString = "435708178.982576"
+                  timestampString = "435710426.978123"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "91"
-                  endingLineNumber = "91"
-                  offsetFromSymbolStart = "444">
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "568">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -87,11 +103,11 @@
                   symbolName = "__31-[LoginViewController onClick:]_block_invoke"
                   moduleName = "EventBook"
                   urlString = "file:///Users/Matt/Desktop/MDF%203%20Stuff/CPM%20Repository/CrossPlatform-Mobile-Development/Week%204/EventBook/EventBook/LoginViewController.m"
-                  timestampString = "435708178.9827"
+                  timestampString = "435710426.978253"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "91"
-                  endingLineNumber = "91"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
                   offsetFromSymbolStart = "58">
                </Location>
             </Locations>
@@ -103,44 +119,62 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "EventBook/LoginViewController.m"
-            timestampString = "435708619.667494"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435710269.589192"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "-onClick:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[LoginViewController onClick:]"
-                  moduleName = "EventBook"
-                  urlString = "file:///Users/Matt/Desktop/MDF%203%20Stuff/CPM%20Repository/CrossPlatform-Mobile-Development/Week%204/EventBook/EventBook/LoginViewController.m"
-                  timestampString = "435708178.983361"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "91"
-                  endingLineNumber = "91"
-                  offsetFromSymbolStart = "444">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__31-[LoginViewController onClick:]_block_invoke"
-                  moduleName = "EventBook"
-                  urlString = "file:///Users/Matt/Desktop/MDF%203%20Stuff/CPM%20Repository/CrossPlatform-Mobile-Development/Week%204/EventBook/EventBook/LoginViewController.m"
-                  timestampString = "435708178.983483"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "91"
-                  endingLineNumber = "91"
-                  offsetFromSymbolStart = "58">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435710272.447274"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435710274.022592"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EventBook/AddViewController.m"
+            timestampString = "435710275.502711"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "-onClick:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

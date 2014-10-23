@@ -227,6 +227,25 @@ bool isEditing;
                     [self updateTableView];
                 }
             }];
+            
+            //create update token to signal other open user devices to update their data
+            //create an update 'token' so that other devices running the app know data was updated
+            PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
+            int value;
+            value = (arc4random());
+            NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+            
+            //store token value to  user prefs
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setValue:convertedInt forKey:@"editKey"];
+            [defaults synchronize];
+            
+            //set id value to the PFObject
+            token[@"editKey"] = convertedInt;
+            
+            
+            token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            [token saveInBackground];
         }
     }];
 }

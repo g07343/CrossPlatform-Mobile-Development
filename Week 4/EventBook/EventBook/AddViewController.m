@@ -151,7 +151,30 @@ NSDate *selectedDate;
                             NSLog(@"Number of items updated was:  %d", itemsUpdated);
                             [oldObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                 if (succeeded) {
-                                    [self dismissViewControllerAnimated:true completion:nil];
+                                    
+                                    //create an update 'token' so that other devices running the app know data was updated
+                                    PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
+                                    int value;
+                                    value = (arc4random());
+                                    NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+                                    
+                                    //store token value to  user prefs
+                                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                    [defaults setValue:convertedInt forKey:@"editKey"];
+                                    [defaults synchronize];
+                                    
+                                    //set id value to the PFObject
+                                    token[@"editKey"] = convertedInt;
+                                    
+                                    
+                                    token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                                    [token saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                                        if (succeeded) {
+                                            [self dismissViewControllerAnimated:true completion:nil];
+                                        }
+                                    }];
+                                    
+                                    
                                 }
                             }];
                         } else {
@@ -177,7 +200,30 @@ NSDate *selectedDate;
                 
                 [event saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
                     if (succeeded) {
-                        [self dismissViewControllerAnimated:true completion:nil];
+                        
+                        //create a token object to signal other devices with app open
+                        
+                        //create an update 'token' so that other devices running the app know data was updated
+                        PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
+                        int value;
+                        value = (arc4random());
+                        NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+                        
+                        //store token value to  user prefs
+                        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                        [defaults setValue:convertedInt forKey:@"editKey"];
+                        [defaults synchronize];
+                        
+                        //set id value to the PFObject
+                        token[@"editKey"] = convertedInt;
+                        
+                        
+                        token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                        [token saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                            if (succeeded) {
+                                [self dismissViewControllerAnimated:true completion:nil];
+                            }
+                        }];
                     } else {
                         
                     }

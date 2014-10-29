@@ -489,33 +489,38 @@ bool wasDisplayed;
 //this method fires when the user long presses on the table view
 -(void)longPressed:(UILongPressGestureRecognizer *)gestureRecognizer {
     bool isConnected = [[NetworkManager GetIntance] networkConnected];
-    if (!(isConnected)) {
-        if ([PFUser currentUser] != nil) {
+    if (isConnected) {
+        if ([PFUser currentUser] == nil) {
            //no logged in user
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No network connection" message:@"You aren't currently logged in.  Please login to delete an event." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
             [alert show];
+        } else {
+            //grab the point that is being long pressed
+            CGPoint point = [gestureRecognizer locationInView:tableView];
+            
+            //grab the index that the point is over
+            NSIndexPath *index = [tableView indexPathForRowAtPoint:point];
+            
+            if (index == nil) {
+                NSLog(@"long pressed on table view but not a row");
+            } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+                NSLog(@"long pressing tableView row:  %d", index.row);
+                
+                //set to global var so we can delete if the user wishes
+                selectedEvent = index.row;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete Event" message:@"Are you sure you want to delete this event?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+                alert.tag = 51;
+                [alert show];
+            }
         }
+        
+    } else {
+        //no internet
         //no internet
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No network connection" message:@"You aren't currently connected to the internet.  Cannot delete an event while offline." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
         [alert show];
     }
-    //grab the point that is being long pressed
-    CGPoint point = [gestureRecognizer locationInView:tableView];
     
-    //grab the index that the point is over
-    NSIndexPath *index = [tableView indexPathForRowAtPoint:point];
-    
-    if (index == nil) {
-        NSLog(@"long pressed on table view but not a row");
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"long pressing tableView row:  %d", index.row);
-        
-        //set to global var so we can delete if the user wishes
-        selectedEvent = index.row;
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Delete Event" message:@"Are you sure you want to delete this event?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
-        alert.tag = 51;
-        [alert show];
-    }
 }
 
 

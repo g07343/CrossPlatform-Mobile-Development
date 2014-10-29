@@ -107,6 +107,24 @@ bool rememberMe = false;
                                     [object setACL:[PFACL ACLWithUser:[PFUser currentUser]]];
                                     [object saveInBackground];
                                 }
+                                
+                                //create an update token
+                                PFObject *token = [[PFObject alloc] initWithClassName:@"wasUpdated"];
+                                int value;
+                                value = (arc4random());
+                                NSString *convertedInt = [NSString stringWithFormat:@"%i", value];
+                                
+                                //store token value to  user prefs
+                                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                [defaults setValue:convertedInt forKey:@"editKey"];
+                                [defaults synchronize];
+                                
+                                //set id value to the PFObject
+                                token[@"editKey"] = convertedInt;
+                                
+                                
+                                token.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                                [token saveInBackground];
                             }
                             
                             //record the 'remember me' preference
